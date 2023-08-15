@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,41 +49,21 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDOIgN_Wbe4097iQ5GWGc5Z0bRpSR_uxqc',
-    appId: '1:557111722654:web:0e486c684d4cdd97ed718f',
-    messagingSenderId: '557111722654',
-    projectId: 'emergency-phone-project-2824f',
-    authDomain: 'emergency-phone-project-2824f.firebaseapp.com',
-    storageBucket: 'emergency-phone-project-2824f.appspot.com',
-    measurementId: 'G-MVGQ51D0WT',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBhF4G4uY0C3It75wMn-9X8Cqfn1PcTNyw',
-    appId: '1:557111722654:android:68c2334265c724bded718f',
-    messagingSenderId: '557111722654',
-    projectId: 'emergency-phone-project-2824f',
-    storageBucket: 'emergency-phone-project-2824f.appspot.com',
+    apiKey: 'AIzaSyCfUvuuMlvziEwjCicRvXZok4tmQTUYuaw',
+    appId: '1:686642366208:android:78a49cd2167c76543615e5',
+    messagingSenderId: '686642366208',
+    projectId: 'emergency-call-v2',
+    storageBucket: 'emergency-call-v2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBDOGJuapcHXWpraxN1c_Yqqnk8XaEsthg',
-    appId: '1:557111722654:ios:9b82505b98c78b76ed718f',
-    messagingSenderId: '557111722654',
-    projectId: 'emergency-phone-project-2824f',
-    storageBucket: 'emergency-phone-project-2824f.appspot.com',
-    iosClientId: '557111722654-2dsddldev9bse8i3qgksikj0642b6r9o.apps.googleusercontent.com',
-    iosBundleId: 'com.example.emergencyPhone',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBDOGJuapcHXWpraxN1c_Yqqnk8XaEsthg',
-    appId: '1:557111722654:ios:9b82505b98c78b76ed718f',
-    messagingSenderId: '557111722654',
-    projectId: 'emergency-phone-project-2824f',
-    storageBucket: 'emergency-phone-project-2824f.appspot.com',
-    iosClientId: '557111722654-2dsddldev9bse8i3qgksikj0642b6r9o.apps.googleusercontent.com',
-    iosBundleId: 'com.example.emergencyPhone',
+    apiKey: 'AIzaSyD3vuI-x03dRkxHy4EjtghpXjIPRGmtFRU',
+    appId: '1:686642366208:ios:1149ca8437136f4f3615e5',
+    messagingSenderId: '686642366208',
+    projectId: 'emergency-call-v2',
+    storageBucket: 'emergency-call-v2.appspot.com',
+    iosClientId: '686642366208-4e5ttsnal5co23sovtmplku7i3kk8inr.apps.googleusercontent.com',
+    iosBundleId: 'com.example.emergencyCallV2',
   );
 }

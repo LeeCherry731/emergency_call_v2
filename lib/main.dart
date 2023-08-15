@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: GoogleFonts.kanit().fontFamily,
         primarySwatch: Colors.blue,
+        // useMaterial3: true,
       ),
       home: const AuthPage(),
     );

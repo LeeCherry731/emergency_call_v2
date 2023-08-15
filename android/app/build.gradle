@@ -47,7 +47,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.emergency_call_v2"
         // minSdkVersion flutter.minSdkVersion
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         // targetSdkVersion 23
         versionCode flutterVersionCode.toInteger()

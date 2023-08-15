@@ -19,7 +19,8 @@ class HomeController extends GetxService {
   TextEditingController inputPhone = TextEditingController();
 
   CollectionReference phones = FirebaseFirestore.instance.collection('phones');
-  CollectionReference categorys = FirebaseFirestore.instance.collection('categorys');
+  CollectionReference categorys =
+      FirebaseFirestore.instance.collection('categorys');
 
   var currentIndex = 0.obs;
 
@@ -32,14 +33,14 @@ class HomeController extends GetxService {
 
   filterByName() {
     phoneItemFilter.value = phoneItems
-        .where((p) => p.categoryName == nameFilter.value && nameFilter.value != "")
+        .where(
+            (p) => p.categoryName == nameFilter.value && nameFilter.value != "")
         .toList();
     // print(nameFilter.value);
     // print(phoneItems.value);
   }
 
   getCategorys() {
-    print("getCategorys");
     categorys.get().then((value) {
       categoryItems.value = value.docs.map((e) => "${e["name"]}").toList();
     });
@@ -65,7 +66,7 @@ class HomeController extends GetxService {
 
   addPhone(String name, String phone) async {
     loadStatus.value = LoadStatus.loading;
-    final addInfo = await phones.add({
+    await phones.add({
       "category_name": nameFilter.value,
       "name": name,
       "phone": phone,

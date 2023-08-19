@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:emergency_call_v2/main.dart';
 import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +153,6 @@ class _AuthPageState extends State<AuthPage> {
 
                         if (emailController.text == "admin@admin.com" &&
                             passwordController.text == "@@admin@@admin@@") {
-                          homeController.isAdmin.value = true;
                           Get.offAll(() => const MainPage());
                           return;
                         }
@@ -165,7 +163,6 @@ class _AuthPageState extends State<AuthPage> {
                             email: emailController.text.trim(),
                             password: passwordController.text.trim(),
                           );
-                          homeController.isAdmin.value = false;
                           Get.offAll(() => const MainPage());
                         } on FirebaseAuthException catch (e) {
                           Get.showSnackbar(GetSnackBar(

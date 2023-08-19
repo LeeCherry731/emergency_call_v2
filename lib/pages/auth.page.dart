@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:emergency_call_v2/common.dart';
-import 'package:emergency_call_v2/home_page.dart';
 import 'package:emergency_call_v2/main.dart';
+import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,9 +70,9 @@ class _AuthPageState extends State<AuthPage> {
                     authState == AuthState.login
                         ? "เข้าสู่ระบบ"
                         : "สมัครสมาชิก",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
-                      color: AppColor.violet,
+                      color: Color.fromARGB(255, 194, 17, 173),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -145,7 +144,8 @@ class _AuthPageState extends State<AuthPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(Get.width * 0.9, 50),
-                        backgroundColor: AppColor.violet,
+                        backgroundColor:
+                            const Color.fromARGB(255, 194, 17, 173),
                       ),
                       onPressed: () async {
                         setState(() {
@@ -155,7 +155,7 @@ class _AuthPageState extends State<AuthPage> {
                         if (emailController.text == "admin@admin.com" &&
                             passwordController.text == "@@admin@@admin@@") {
                           homeController.isAdmin.value = true;
-                          Get.offAll(() => HomePage());
+                          Get.offAll(() => const MainPage());
                           return;
                         }
 
@@ -166,7 +166,7 @@ class _AuthPageState extends State<AuthPage> {
                             password: passwordController.text.trim(),
                           );
                           homeController.isAdmin.value = false;
-                          Get.offAll(() => const HomePage());
+                          Get.offAll(() => const MainPage());
                         } on FirebaseAuthException catch (e) {
                           Get.showSnackbar(GetSnackBar(
                             title: "เกิดข้อผิดพลาด",
@@ -187,7 +187,8 @@ class _AuthPageState extends State<AuthPage> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(Get.width * 0.9, 50),
-                        backgroundColor: AppColor.violet,
+                        backgroundColor:
+                            const Color.fromARGB(255, 194, 17, 173),
                       ),
                       onPressed: () async {
                         final isValid = formKey.currentState!.validate();
@@ -230,11 +231,11 @@ class _AuthPageState extends State<AuthPage> {
                           authState = AuthState.registor;
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         "สมัครสมาชิก",
                         style: TextStyle(
                           fontSize: 18,
-                          color: AppColor.violet,
+                          color: Color.fromARGB(255, 194, 17, 173),
                         ),
                       ),
                     ),
@@ -245,11 +246,11 @@ class _AuthPageState extends State<AuthPage> {
                           authState = AuthState.login;
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         "เข้าสู่ระบบ",
                         style: TextStyle(
                           fontSize: 18,
-                          color: AppColor.violet,
+                          color: Color.fromARGB(255, 194, 17, 173),
                         ),
                       ),
                     ),

@@ -1,6 +1,5 @@
-import 'package:emergency_call_v2/auth_page.dart';
+import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/controllers/home_controller.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';

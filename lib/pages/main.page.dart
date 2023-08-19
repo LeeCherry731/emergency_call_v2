@@ -1,5 +1,5 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:emergency_call_v2/pages/about.page.dart';
+import 'package:emergency_call_v2/pages/about.page/about.page.dart';
 import 'package:emergency_call_v2/pages/contact.page.dart';
 import 'package:emergency_call_v2/pages/home.page.dart';
 import 'package:emergency_call_v2/pages/location.page.dart';

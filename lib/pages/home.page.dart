@@ -24,8 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: Color.fromARGB(255, 221, 221, 221),
       body: SizedBox(
         height: Get.height,
         width: Get.width,
@@ -143,6 +142,19 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 221, 221, 221),
+      body: Container(
+        height: Get.height,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.5,
+            image: AssetImage("assets/images/bg_hospital.jpg"),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Container(),
+      ),
       // body: GoogleMap(
       //   mapType: MapType.hybrid,
       //   initialCameraPosition: _kGooglePlex,

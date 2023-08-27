@@ -79,11 +79,14 @@ class _LocationAddState extends State<LocationAdd> {
   }
 
   Set<Marker> myMarker = {
-    // const Marker(
+    // Marker(
     //   markerId: MarkerId("value1"),
     //   position: LatLng(13.768566, 100.3425051),
     //   infoWindow: InfoWindow(title: "${13.768566}, ${100.3425051}"),
     //   icon: BitmapDescriptor.defaultMarker,
+    //   onTap: () {
+    //     log.i("value1 Tap!");
+    //   },
     // ),
     // const Marker(
     //   markerId: MarkerId("value1"),
@@ -94,18 +97,24 @@ class _LocationAddState extends State<LocationAdd> {
   addMarker(LatLng point) async {
     log.i(point);
     final id = Random().nextInt(10000);
+    await Future.delayed(const Duration(milliseconds: 250));
 
     setState(() {
       myPoint = point;
-      myMarker.add(
-        Marker(
-          markerId: MarkerId("$id"),
-          infoWindow:
-              InfoWindow(title: "${point.longitude}, ${point.longitude}"),
-          icon: BitmapDescriptor.defaultMarker,
-          position: LatLng(point.longitude, point.longitude),
+
+      final Marker marker = Marker(
+        markerId: MarkerId("$id"),
+        position: LatLng(
+          point.latitude,
+          point.longitude,
         ),
+        infoWindow: InfoWindow(title: "markerIdVal", snippet: '*'),
+        onTap: () {
+          log.i("$id Tap!");
+        },
       );
+      // final newMarker = [...listMarkers, marker];
+      myMarker = {...myMarker, marker};
 
       log.i("$id - ${myMarker.length}");
     });
@@ -116,6 +125,7 @@ class _LocationAddState extends State<LocationAdd> {
     );
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+    // setState(() {});
   }
 
   @override
@@ -150,6 +160,7 @@ class _LocationAddState extends State<LocationAdd> {
             },
             onTap: addMarker,
             markers: myMarker,
+            // markers: Set.of(listMarkers),
             zoomControlsEnabled: true,
           ),
           Positioned(

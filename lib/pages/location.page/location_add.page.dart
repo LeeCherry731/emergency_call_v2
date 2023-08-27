@@ -20,9 +20,11 @@ class _LocationAddState extends State<LocationAdd> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
+  double zoom = 14.0;
+
   final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(13.768566, 100.3425051),
-    zoom: 14.4746,
+    zoom: 14,
   );
 
   LatLng myLocation = const LatLng(0, 0);
@@ -110,7 +112,7 @@ class _LocationAddState extends State<LocationAdd> {
 
     final CameraPosition myLocation = CameraPosition(
       target: LatLng(point.latitude, point.longitude),
-      zoom: 14.4746,
+      zoom: zoom,
     );
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));

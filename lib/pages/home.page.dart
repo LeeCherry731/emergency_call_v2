@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:emergency_call_v2/controllers/home_controller.dart';
+import 'package:emergency_call_v2/controllers/home.ctr.dart';
+import 'package:emergency_call_v2/pages/location.page/location_add.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,108 +73,84 @@ class _HomeContentState extends State<HomeContent> {
             elevation: 1,
           ),
           onPressed: () {
-            debugPrint("press");
+            if (option == null) {
+              homeCtr.snackError(
+                  title: "Please select", msg: "กรุณาเลือกประเภท");
+              return;
+            }
+            Get.to(
+              () => LocationAdd(
+                option: option!,
+              ),
+            );
           },
           child: "SOS".text.minFontSize(80).make(),
         ),
         const SizedBox(height: 10),
-        Column(
-          children: [
-            Card(
-              child: RadioListTile<String?>(
-                value: options[0],
-                groupValue: option,
-                activeColor: Colors.purpleAccent,
-                onChanged: (String? val) {
-                  if (val != null) {
-                    setState(() {
-                      option = val;
-                    });
-                  }
-                },
-                title:
-                    options[0].text.minFontSize(18).color(Colors.black).make(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50),
+          child: Column(
+            children: [
+              Card(
+                child: RadioListTile<String?>(
+                  value: options[0],
+                  groupValue: option,
+                  activeColor: Colors.purpleAccent,
+                  onChanged: (String? val) {
+                    if (val != null) {
+                      setState(() {
+                        option = val;
+                      });
+                    }
+                  },
+                  title: options[0]
+                      .text
+                      .minFontSize(18)
+                      .color(Colors.black)
+                      .make(),
+                ),
               ),
-            ),
-            Card(
-              child: RadioListTile<String?>(
-                value: options[1],
-                groupValue: option,
-                activeColor: Colors.purpleAccent,
-                onChanged: (String? val) {
-                  if (val != null) {
-                    setState(() {
-                      option = val;
-                    });
-                  }
-                },
-                title:
-                    options[1].text.minFontSize(18).color(Colors.black).make(),
+              Card(
+                child: RadioListTile<String?>(
+                  value: options[1],
+                  groupValue: option,
+                  activeColor: Colors.purpleAccent,
+                  onChanged: (String? val) {
+                    if (val != null) {
+                      setState(() {
+                        option = val;
+                      });
+                    }
+                  },
+                  title: options[1]
+                      .text
+                      .minFontSize(18)
+                      .color(Colors.black)
+                      .make(),
+                ),
               ),
-            ),
-            Card(
-              child: RadioListTile<String?>(
-                value: options[2],
-                groupValue: option,
-                activeColor: Colors.purpleAccent,
-                onChanged: (String? val) {
-                  if (val != null) {
-                    setState(() {
-                      option = val;
-                    });
-                  }
-                },
-                title:
-                    options[2].text.minFontSize(18).color(Colors.black).make(),
+              Card(
+                child: RadioListTile<String?>(
+                  value: options[2],
+                  groupValue: option,
+                  activeColor: Colors.purpleAccent,
+                  onChanged: (String? val) {
+                    if (val != null) {
+                      setState(() {
+                        option = val;
+                      });
+                    }
+                  },
+                  title: options[2]
+                      .text
+                      .minFontSize(18)
+                      .color(Colors.black)
+                      .make(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         )
-        // const SizedBox(height: 10),
-        // Container(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-        //   decoration: const BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.all(
-        //       Radius.circular(20),
-        //     ),
-        //   ),
-        //   child: "เหตุด่วนเหตุร้าย"
-        //       .text
-        //       .minFontSize(24)
-        //       .color(Colors.redAccent)
-        //       .make(),
-        // ),
-        // const SizedBox(height: 10),
-        // Container(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-        //   decoration: const BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.all(
-        //       Radius.circular(20),
-        //     ),
-        //   ),
-        //   child: "อุบัติเหตุฉุกเฉิน"
-        //       .text
-        //       .minFontSize(24)
-        //       .color(Colors.redAccent)
-        //       .make(),
-        // ),
-        // const SizedBox(height: 10),
-        // Container(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-        //   decoration: const BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.all(
-        //       Radius.circular(20),
-        //     ),
-        //   ),
-        //   child: "แจ้งเหตุไปไหม้"
-        //       .text
-        //       .minFontSize(24)
-        //       .color(Colors.redAccent)
-        //       .make(),
-        // ),
       ],
     );
   }
@@ -196,7 +173,7 @@ class MapSampleState extends State<MapSample> {
   );
 
   static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
+    // bearing: 192.8334901395799,
     target: LatLng(37.43296265331129, -122.08832357078792),
     tilt: 59.440717697143555,
     zoom: 19.151926040649414,
@@ -208,31 +185,24 @@ class MapSampleState extends State<MapSample> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 221, 221, 221),
-      body: Container(
-        height: Get.height,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            opacity: 0.5,
-            image: AssetImage("assets/images/bg_hospital.jpg"),
-            fit: BoxFit.fill,
-          ),
-        ),
-        child: Container(),
-      ),
-      // body: GoogleMap(
-      //   mapType: MapType.hybrid,
-      //   initialCameraPosition: _kGooglePlex,
-      //   onMapCreated: (GoogleMapController controller) {
-      //     _controller.complete(controller);
-      //   },
+      // body: Container(
+      //   color: const Color.fromARGB(255, 200, 200, 200),
       // ),
+      body: GoogleMap(
+        mapType: MapType.hybrid,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: FloatingActionButton(
           backgroundColor: Colors.white,
-          onPressed: printLog,
+          onPressed: () {
+            // _goToYourLocation();
+          },
           child: const Icon(
             Icons.pin_drop_outlined,
             color: Colors.black,
@@ -247,43 +217,43 @@ class MapSampleState extends State<MapSample> {
     log.i("message");
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+  // Future<void> _goToTheLake() async {
+  //   final GoogleMapController controller = await _controller.future;
+  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // }
 
-  Future<void> _goToYourLocation() async {
-    var serviceEnabled = await location.serviceEnabled();
-    debugPrint(serviceEnabled.toString());
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
+  // Future<void> _goToYourLocation() async {
+  //   var serviceEnabled = await location.serviceEnabled();
+  //   debugPrint(serviceEnabled.toString());
+  //   if (!serviceEnabled) {
+  //     serviceEnabled = await location.requestService();
+  //     if (!serviceEnabled) {
+  //       return;
+  //     }
+  //   }
 
-    var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    debugPrint(_permissionGranted.toString());
+  //   var _permissionGranted = await location.hasPermission();
+  //   if (_permissionGranted == PermissionStatus.denied) {
+  //     _permissionGranted = await location.requestPermission();
+  //     if (_permissionGranted != PermissionStatus.granted) {
+  //       return;
+  //     }
+  //   }
+  //   debugPrint(_permissionGranted.toString());
 
-    var currentLocation = await location.getLocation();
+  //   var currentLocation = await location.getLocation();
 
-    debugPrint(currentLocation.toString());
+  //   debugPrint(currentLocation.toString());
 
-    final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target:
-          LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414,
-    );
+  //   final CameraPosition _kLake = CameraPosition(
+  //     // bearing: 192.8334901395799,
+  //     target:
+  //         LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
+  //     // tilt: 59.440717697143555,
+  //     zoom: 19.151926040649414,
+  //   );
 
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+  //   final GoogleMapController controller = await _controller.future;
+  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // }
 }

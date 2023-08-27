@@ -34,10 +34,13 @@ class _ContactPageState extends State<ContactPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 10),
-                      child: Image.asset(
-                        "assets/images/emergency_pic1.jpg",
-                        width: 70,
+                      padding: const EdgeInsets.all(10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          "assets/images/emergency_pic1.jpg",
+                          width: 80,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),

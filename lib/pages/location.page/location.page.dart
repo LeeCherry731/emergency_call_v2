@@ -1,3 +1,4 @@
+import 'package:emergency_call_v2/pages/location.page/locaiton_detail.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -15,14 +16,14 @@ class _LocationPageState extends State<LocationPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 228, 228, 228),
       body: ListView.builder(
-        itemCount: 6,
+        itemCount: 10,
         itemBuilder: (context, i) {
           return Card(
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 color: Theme.of(context).colorScheme.outline,
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             elevation: 10,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -30,10 +31,13 @@ class _LocationPageState extends State<LocationPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    "assets/images/emergency_pic1.jpg",
-                    width: Get.width * 0.3,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      "assets/images/emergency_pic1.jpg",
+                      width: Get.width * 0.3,
+                    ),
                   ),
                 ),
                 Column(
@@ -55,7 +59,9 @@ class _LocationPageState extends State<LocationPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => const LocationDetailPage());
+                  },
                   child: "ดู $i".text.make(),
                 )
               ],

@@ -1,5 +1,5 @@
 import 'package:emergency_call_v2/pages/auth.page.dart';
-import 'package:emergency_call_v2/controllers/home_controller.dart';
+import 'package:emergency_call_v2/controllers/home.ctr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,8 +15,6 @@ void main() async {
 
   runApp(const MyApp());
 }
-
-final HomeController homeController = Get.put(HomeController());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

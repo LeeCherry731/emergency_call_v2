@@ -22,17 +22,20 @@ class _NewsPageState extends State<NewsPage> {
               side: BorderSide(
                 color: Theme.of(context).colorScheme.outline,
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
             elevation: 10,
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    "assets/images/newspaper.jpg",
-                    width: Get.width * 0.3,
+                  padding: const EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      "assets/images/newspaper.jpg",
+                      width: Get.width * 0.3,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),

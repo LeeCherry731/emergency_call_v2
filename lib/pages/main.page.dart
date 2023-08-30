@@ -1,10 +1,13 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:emergency_call_v2/pages/about.page/about.page.dart';
+import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/pages/contact.page.dart';
 import 'package:emergency_call_v2/pages/home.page.dart';
 import 'package:emergency_call_v2/pages/location.page/location.page.dart';
 import 'package:emergency_call_v2/pages/news.page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -55,6 +58,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 207, 12, 129),
+      ),
+      drawer: const NavigationDrawer(),
       extendBody: false,
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       body: pages[indexPage],
@@ -68,6 +75,47 @@ class _MainPageState extends State<MainPage> {
         onTap: (int index) => setState(() {
           indexPage = index;
         }),
+      ),
+    );
+  }
+}
+
+class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset("assets/icon/icon.png"),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.home_outlined),
+                title: "Home".text.size(20).make(),
+                onTap: () {
+                  Get.offAll(() => const MainPage());
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.login),
+                title: "เข้าสู่ระบบ".text.size(20).make(),
+                onTap: () {
+                  Get.to(() => const AuthPage());
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: "ออกจากระบบ".text.size(20).make(),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

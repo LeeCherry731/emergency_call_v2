@@ -1,6 +1,7 @@
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/controllers/home.ctr.dart';
 import 'package:emergency_call_v2/pages/examples/map.exp.dart';
+import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         // useMaterial3: true,
       ),
-      home: const AuthPage(),
+      // home: const AuthPage(),
+      home: const MainPage(),
       // home: PlaceMarkerPage(),
     );
   }

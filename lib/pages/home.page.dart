@@ -1,10 +1,9 @@
 import 'dart:async';
-
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:emergency_call_v2/controllers/home.ctr.dart';
-import 'package:emergency_call_v2/pages/location.page/location_add.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:location/location.dart';
@@ -59,6 +58,14 @@ class _HomeContentState extends State<HomeContent> {
   ];
   String? option;
 
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -78,11 +85,23 @@ class _HomeContentState extends State<HomeContent> {
                   title: "Please select", msg: "กรุณาเลือกประเภท");
               return;
             }
-            Get.to(
-              () => LocationAdd(
-                option: option!,
-              ),
-            );
+            switch (option) {
+              case "เหตุด่วนเหตุร้าย 191":
+                _makePhoneCall("191");
+                break;
+              case "อุบัติเหตุฉุกเฉิน 1669":
+                _makePhoneCall("1669");
+                break;
+              case "แจ้งเหตุไฟไหม้ 199":
+                _makePhoneCall("199");
+                break;
+              default:
+            }
+            // Get.to(
+            //   () => LocationAdd(
+            //     option: option!,
+            //   ),
+            // );
           },
           child: "SOS".text.minFontSize(80).make(),
         ),
@@ -172,13 +191,6 @@ class MapSampleState extends State<MapSample> {
     zoom: 14.4746,
   );
 
-  static const CameraPosition _kLake = CameraPosition(
-    // bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
-
   final location = Location();
 
   @override
@@ -195,13 +207,13 @@ class MapSampleState extends State<MapSample> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: FloatingActionButton(
           backgroundColor: Colors.white,
           onPressed: () {
-            // _goToYourLocation();
+            _goToYourLocation();
           },
           child: const Icon(
             Icons.pin_drop_outlined,
@@ -213,47 +225,45 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  printLog() {
-    log.i("message");
+  void _showLoading() async {
+    SmartDialog.showLoading(msg: "Loading...");
+    SmartDialog.dismiss();
   }
 
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
+  Future<void> _goToYourLocation() async {
+    SmartDialog.showLoading(msg: "Loading...");
+    var serviceEnabled = await location.serviceEnabled();
+    debugPrint(serviceEnabled.toString());
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
 
-  // Future<void> _goToYourLocation() async {
-  //   var serviceEnabled = await location.serviceEnabled();
-  //   debugPrint(serviceEnabled.toString());
-  //   if (!serviceEnabled) {
-  //     serviceEnabled = await location.requestService();
-  //     if (!serviceEnabled) {
-  //       return;
-  //     }
-  //   }
+    var _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    debugPrint(_permissionGranted.toString());
 
-  //   var _permissionGranted = await location.hasPermission();
-  //   if (_permissionGranted == PermissionStatus.denied) {
-  //     _permissionGranted = await location.requestPermission();
-  //     if (_permissionGranted != PermissionStatus.granted) {
-  //       return;
-  //     }
-  //   }
-  //   debugPrint(_permissionGranted.toString());
+    var currentLocation = await location.getLocation();
 
-  //   var currentLocation = await location.getLocation();
+    debugPrint(currentLocation.toString());
 
-  //   debugPrint(currentLocation.toString());
+    final CameraPosition _kLake = CameraPosition(
+      // bearing: 192.8334901395799,
+      target:
+          LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
+      // tilt: 59.440717697143555,
+      zoom: 19.151926040649414,
+    );
 
-  //   final CameraPosition _kLake = CameraPosition(
-  //     // bearing: 192.8334901395799,
-  //     target:
-  //         LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
-  //     // tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414,
-  //   );
-
-  //   final GoogleMapController controller = await _controller.future;
-  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
+    final GoogleMapController controller = await _controller.future;
+    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    SmartDialog.dismiss();
+  }
 }

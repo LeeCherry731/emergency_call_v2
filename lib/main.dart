@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,14 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Emergency phone',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [FlutterSmartDialog.observer],
+      // here
+      builder: FlutterSmartDialog.init(
+          //default toast widget
+          // toastBuilder: (String msg) => CustomToastWidget(msg: msg),
+          //default loading widget
+          // loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+          ),
       theme: ThemeData(
         fontFamily: GoogleFonts.kanit().fontFamily,
         primarySwatch: Colors.blue,

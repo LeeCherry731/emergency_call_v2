@@ -20,6 +20,8 @@ class HomeCtr extends GetxService {
   snackError({required title, required msg}) {
     log.i("snackError");
 
-    Get.snackbar(title, msg, backgroundColor: Colors.redAccent);
+    Get.snackbar(title, msg,
+        backgroundColor: const Color.fromARGB(255, 233, 45, 45),
+        colorText: Colors.white);
   }
 }

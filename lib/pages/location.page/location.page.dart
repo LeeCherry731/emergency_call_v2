@@ -14,6 +14,17 @@ class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        onPressed: () {
+          // _goToYourLocation();
+        },
+        child: const Icon(
+          Icons.plus_one,
+          color: Colors.black,
+          size: 35,
+        ),
+      ),
       backgroundColor: const Color.fromARGB(255, 228, 228, 228),
       body: ListView.builder(
         itemCount: 10,

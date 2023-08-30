@@ -53,9 +53,9 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   List<String> options = [
-    "เหตุด่วนเหตุร้าย",
-    "อุบัติเหตุฉุกเฉิน",
-    "แจ้งเหตุไฟไหม้"
+    "เหตุด่วนเหตุร้าย 191",
+    "อุบัติเหตุฉุกเฉิน 1669",
+    "แจ้งเหตุไฟไหม้ 199"
   ];
   String? option;
 

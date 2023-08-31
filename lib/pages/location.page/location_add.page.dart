@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:emergency_call_v2/controllers/home.ctr.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -8,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationAdd extends StatefulWidget {
-  final String option;
-
-  const LocationAdd({super.key, required this.option});
+  const LocationAdd({super.key});
 
   @override
   State<LocationAdd> createState() => _LocationAddState();
@@ -20,19 +19,19 @@ class _LocationAddState extends State<LocationAdd> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  double zoom = 14.0;
+  double zoom = 17.0;
 
-  final CameraPosition _kGooglePlex = CameraPosition(
+  final CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(13.768566, 100.3425051),
     zoom: 14,
   );
 
-  LatLng myLocation = const LatLng(0, 0);
   LatLng myPoint = const LatLng(0, 0);
 
   final location = Location();
 
   Future<void> _goToYourLocation() async {
+    SmartDialog.showLoading(msg: "Loading...");
     var serviceEnabled = await location.serviceEnabled();
     debugPrint(serviceEnabled.toString());
     if (!serviceEnabled) {
@@ -42,10 +41,10 @@ class _LocationAddState extends State<LocationAdd> {
       }
     }
 
-    var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    var permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -54,19 +53,15 @@ class _LocationAddState extends State<LocationAdd> {
 
     log.i(currentLocation);
 
-    final CameraPosition _myLocation = CameraPosition(
+    CameraPosition myLocation = CameraPosition(
       target:
           LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
-      zoom: 19.151926040649414,
+      zoom: zoom,
     );
 
-    setState(() {
-      myLocation =
-          LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0);
-    });
-
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_myLocation));
+    await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+    SmartDialog.dismiss();
   }
 
   void showBottomSheet() async {
@@ -108,15 +103,12 @@ class _LocationAddState extends State<LocationAdd> {
           point.latitude,
           point.longitude,
         ),
-        infoWindow: InfoWindow(title: "markerIdVal", snippet: '*'),
+        infoWindow: const InfoWindow(title: "My Pin", snippet: '*'),
         onTap: () {
           log.i("$id Tap!");
         },
       );
-      // final newMarker = [...listMarkers, marker];
-      myMarker = {...myMarker, marker};
-
-      log.i("$id - ${myMarker.length}");
+      myMarker = {marker};
     });
 
     final CameraPosition myLocation = CameraPosition(
@@ -140,13 +132,8 @@ class _LocationAddState extends State<LocationAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: "ข้อมูล ${widget.option}".text.minFontSize(18).make(),
+        title: "Mark your location".text.minFontSize(18).make(),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        log.i("floatingActionButton");
-        // _goToYourLocation();
-        addMarker(const LatLng(13.76, 100.34));
-      }),
       body: Stack(
         children: [
           GoogleMap(
@@ -165,23 +152,65 @@ class _LocationAddState extends State<LocationAdd> {
           ),
           Positioned(
             bottom: 0,
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(30))),
+            child: SizedBox(
               width: Get.width,
-              height: 100,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    "Lat : ${myPoint.latitude}".text.size(20).make(),
-                    SizedBox(height: 10),
-                    "Long : ${myPoint.longitude}".text.size(20).make()
-                  ],
-                ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FloatingActionButton(
+                          child: Icon(Icons.pin_drop_rounded),
+                          onPressed: () {
+                            _goToYourLocation();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FloatingActionButton(
+                          child: Icon(Icons.add),
+                          onPressed: () {
+                            homeCtr.addLocation(myPoint);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FloatingActionButton(
+                          child: Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              myMarker = {};
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(30))),
+                    width: Get.width,
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          "Lat : ${myPoint.latitude}".text.size(20).make(),
+                          const SizedBox(height: 10),
+                          "Long : ${myPoint.longitude}".text.size(20).make()
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

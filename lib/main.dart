@@ -1,6 +1,4 @@
-import 'package:emergency_call_v2/pages/auth.page.dart';
-import 'package:emergency_call_v2/controllers/home.ctr.dart';
-import 'package:emergency_call_v2/pages/examples/map.exp.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,12 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorObservers: [FlutterSmartDialog.observer],
       // here
-      builder: FlutterSmartDialog.init(
-          //default toast widget
-          // toastBuilder: (String msg) => CustomToastWidget(msg: msg),
-          //default loading widget
-          // loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
-          ),
+      builder: FlutterSmartDialog.init(),
       theme: ThemeData(
         fontFamily: GoogleFonts.kanit().fontFamily,
         primarySwatch: Colors.blue,

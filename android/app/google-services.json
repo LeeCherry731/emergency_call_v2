@@ -29,6 +29,13 @@
             {
               "client_id": "686642366208-abt1eo41gn443s25tl1543g4e3s3qmjt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "686642366208-4e5ttsnal5co23sovtmplku7i3kk8inr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.emergencyCallV2"
+              }
             }
           ]
         }

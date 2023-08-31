@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 207, 12, 129),
+        backgroundColor: const Color.fromARGB(255, 207, 12, 129),
       ),
       drawer: const NavigationDrawer(),
       extendBody: false,

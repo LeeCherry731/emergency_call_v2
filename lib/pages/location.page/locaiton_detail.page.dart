@@ -34,27 +34,27 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
       }
     }
 
-    var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    var permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
-    debugPrint(_permissionGranted.toString());
+    debugPrint(permissionGranted.toString());
 
     var currentLocation = await location.getLocation();
 
     log.i(currentLocation);
 
-    final CameraPosition _myLocation = CameraPosition(
+    final CameraPosition myLocation = CameraPosition(
       target:
           LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
       zoom: 19.151926040649414,
     );
 
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_myLocation));
+    await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
   }
 
   @override

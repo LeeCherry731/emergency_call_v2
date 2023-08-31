@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -55,15 +58,5 @@ class DefaultFirebaseOptions {
     messagingSenderId: '686642366208',
     projectId: 'emergency-call-v2',
     storageBucket: 'emergency-call-v2.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD3vuI-x03dRkxHy4EjtghpXjIPRGmtFRU',
-    appId: '1:686642366208:ios:1149ca8437136f4f3615e5',
-    messagingSenderId: '686642366208',
-    projectId: 'emergency-call-v2',
-    storageBucket: 'emergency-call-v2.appspot.com',
-    iosClientId: '686642366208-4e5ttsnal5co23sovtmplku7i3kk8inr.apps.googleusercontent.com',
-    iosBundleId: 'com.example.emergencyCallV2',
   );
 }

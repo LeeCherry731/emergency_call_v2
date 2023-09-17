@@ -111,10 +111,14 @@ class _HomeContentState extends State<HomeContent> {
           child: Column(
             children: [
               Card(
+                color: Colors.pinkAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
                 child: RadioListTile<String?>(
                   value: options[0],
                   groupValue: option,
-                  activeColor: Colors.purpleAccent,
+                  activeColor: Colors.amber,
                   onChanged: (String? val) {
                     if (val != null) {
                       setState(() {
@@ -130,10 +134,14 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
               Card(
+                color: Colors.pinkAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
                 child: RadioListTile<String?>(
                   value: options[1],
                   groupValue: option,
-                  activeColor: Colors.purpleAccent,
+                  activeColor: Colors.amber,
                   onChanged: (String? val) {
                     if (val != null) {
                       setState(() {
@@ -149,10 +157,14 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
               Card(
+                color: Colors.pinkAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
                 child: RadioListTile<String?>(
                   value: options[2],
                   groupValue: option,
-                  activeColor: Colors.purpleAccent,
+                  activeColor: Colors.amber,
                   onChanged: (String? val) {
                     if (val != null) {
                       setState(() {
@@ -211,13 +223,13 @@ class MapSampleState extends State<MapSample> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: FloatingActionButton(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.amber,
           onPressed: () {
             _goToYourLocation();
           },
           child: const Icon(
             Icons.pin_drop_outlined,
-            color: Colors.black,
+            color: Colors.purple,
             size: 35,
           ),
         ),

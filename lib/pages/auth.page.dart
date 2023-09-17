@@ -142,6 +142,9 @@ class _AuthPageState extends State<AuthPage> {
                   if (authState == AuthState.login)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         fixedSize: Size(Get.width * 0.9, 50),
                         backgroundColor:
                             const Color.fromARGB(255, 194, 17, 173),
@@ -183,6 +186,9 @@ class _AuthPageState extends State<AuthPage> {
                   if (authState == AuthState.registor)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         fixedSize: Size(Get.width * 0.9, 50),
                         backgroundColor:
                             const Color.fromARGB(255, 194, 17, 173),
@@ -252,6 +258,33 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   if (loading == true) const CircularProgressIndicator(),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        authState = AuthState.login;
+                      });
+                    },
+                    child: const Text(
+                      "เข้าสู่ระบบ",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color.fromARGB(255, 194, 17, 173),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text(
+                      "skip.",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 18,
+                        color: Color.fromARGB(255, 31, 101, 207),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

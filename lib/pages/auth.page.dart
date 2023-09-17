@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,14 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  final emailController = TextEditingController();
-  final nameController = TextEditingController();
-  final passwordController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
+
+  final emailCtr = TextEditingController();
+  final passwordCtr = TextEditingController();
+
+  final firstnameCtr = TextEditingController();
+  final lastnameCtr = TextEditingController();
+  final phoneCtr = TextEditingController();
 
   AuthState authState = AuthState.login;
   bool loading = false;
@@ -29,22 +33,18 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void initState() {
-    // setState(() {
-    //   emailController.text = "test@test.com";
-    //   passwordController.text = "aaaaaa";
-    // });
     setState(() {
-      emailController.text = "admin@admin.com";
-      passwordController.text = "@@admin@@admin@@";
+      emailCtr.text = "admin@admin.com";
+      passwordCtr.text = "@@admin@@admin@@";
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    nameController.dispose();
-    passwordController.dispose();
+    emailCtr.dispose();
+    firstnameCtr.dispose();
+    passwordCtr.dispose();
 
     super.dispose();
   }
@@ -75,30 +75,10 @@ class _AuthPageState extends State<AuthPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  if (authState == AuthState.registor)
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        hintStyle: TextStyle(color: Colors.grey[800]),
-                        hintText: "Username",
-                        fillColor: Colors.white70,
-                      ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (name) => name != null && name.length < 2
-                          ? "ชื่อต้องไม่ต่ำกว่า 2 ตัวอักษร"
-                          : null,
-                    ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    controller: emailController,
+                    controller: emailCtr,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
                       filled: true,
                       hintStyle: TextStyle(color: Colors.grey[800]),
                       hintText: "Email",
@@ -110,9 +90,57 @@ class _AuthPageState extends State<AuthPage> {
                             ? "Enter a valid email"
                             : null,
                   ),
+                  if (authState == AuthState.registor)
+                    Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          controller: firstnameCtr,
+                          decoration: InputDecoration(
+                            filled: true,
+                            hintStyle: TextStyle(color: Colors.grey[800]),
+                            hintText: "ชื่อจริง",
+                            fillColor: Colors.white70,
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (name) => name != null && name.length < 2
+                              ? "ชื่อจริงต้องไม่ต่ำกว่า 2 ตัวอักษร"
+                              : null,
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          controller: lastnameCtr,
+                          decoration: InputDecoration(
+                            filled: true,
+                            hintStyle: TextStyle(color: Colors.grey[800]),
+                            hintText: "นามสกุล",
+                            fillColor: Colors.white70,
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (name) => name != null && name.length < 2
+                              ? "นามสกุลต้องไม่ต่ำกว่า 2 ตัวอักษร"
+                              : null,
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          keyboardType: TextInputType.phone,
+                          controller: phoneCtr,
+                          decoration: InputDecoration(
+                            filled: true,
+                            hintStyle: TextStyle(color: Colors.grey[800]),
+                            hintText: "เบอร์โทรศัพท์",
+                            fillColor: Colors.white70,
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (name) => name != null && name.length < 2
+                              ? "เบอร์โทรศัพท์ไม่ต่ำกว่า 8 ตัวอักษร"
+                              : null,
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    controller: passwordController,
+                    controller: passwordCtr,
                     obscureText: showPassword,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
@@ -124,9 +152,6 @@ class _AuthPageState extends State<AuthPage> {
                           icon: Icon(!showPassword
                               ? Icons.visibility
                               : Icons.visibility_off)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
                       filled: true,
                       hintStyle: TextStyle(color: Colors.grey[800]),
                       hintText: "Password",
@@ -154,25 +179,10 @@ class _AuthPageState extends State<AuthPage> {
                           loading = true;
                         });
 
-                        if (emailController.text == "admin@admin.com" &&
-                            passwordController.text == "@@admin@@admin@@") {
-                          Get.offAll(() => const MainPage());
-                          return;
-                        }
-
-                        try {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          );
-                          Get.offAll(() => const MainPage());
-                        } on FirebaseAuthException catch (e) {
-                          Get.showSnackbar(GetSnackBar(
-                            title: "เกิดข้อผิดพลาด",
-                            message: e.toString(),
-                          ));
-                        }
+                        await mainCtr.login(
+                          email: emailCtr.text,
+                          password: passwordCtr.text,
+                        );
 
                         setState(() {
                           loading = false;
@@ -203,12 +213,12 @@ class _AuthPageState extends State<AuthPage> {
                         try {
                           final result = await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
+                            email: emailCtr.text.trim(),
+                            password: passwordCtr.text.trim(),
                           );
                           if (result.isBlank == false) {
                             result.user!
-                                .updateDisplayName(nameController.text.trim());
+                                .updateDisplayName(firstnameCtr.text.trim());
                           }
                         } on FirebaseAuthException catch (e) {
                           Get.showSnackbar(GetSnackBar(
@@ -258,20 +268,6 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   if (loading == true) const CircularProgressIndicator(),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        authState = AuthState.login;
-                      });
-                    },
-                    child: const Text(
-                      "เข้าสู่ระบบ",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color.fromARGB(255, 194, 17, 173),
-                      ),
-                    ),
-                  ),
                   TextButton(
                     onPressed: () {
                       Get.back();

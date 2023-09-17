@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emergency_call_v2/controllers/home.ctr.dart';
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:emergency_call_v2/controllers/home.ctr.dart';
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,7 +81,7 @@ class _HomeContentState extends State<HomeContent> {
           ),
           onPressed: () {
             if (option == null) {
-              homeCtr.snackError(
+              mainCtr.snackError(
                   title: "Please select", msg: "กรุณาเลือกประเภท");
               return;
             }

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:emergency_call_v2/controllers/home.ctr.dart';
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
@@ -173,7 +173,7 @@ class _LocationAddState extends State<LocationAdd> {
                         child: FloatingActionButton(
                           child: Icon(Icons.add),
                           onPressed: () {
-                            homeCtr.addLocation(myPoint);
+                            mainCtr.addLocation(myPoint);
                           },
                         ),
                       ),

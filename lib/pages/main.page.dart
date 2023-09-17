@@ -1,4 +1,5 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/pages/about.page/about.page.dart';
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/pages/contact.page.dart';
@@ -59,6 +60,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: mainCtr.userModel.value.firstname.text
+            .size(20)
+            .color(Colors.white)
+            .make(),
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 207, 12, 129),
       ),
       drawer: const NavigationDrawer(),

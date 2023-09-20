@@ -76,14 +76,6 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
       );
       markers = {marker};
     });
-
-    // final CameraPosition myLocation = CameraPosition(
-    //   target: LatLng(point.latitude, point.longitude),
-    //   zoom: zoom,
-    // );
-    // final GoogleMapController controller = await _controller.future;
-    // await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
-    // setState(() {});
   }
 
   @override

@@ -18,6 +18,11 @@ class LocationAdd extends StatefulWidget {
 class _LocationAddState extends State<LocationAdd> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  final formKey = GlobalKey<FormState>();
+  final emailCtr = TextEditingController();
+  final nameCtr = TextEditingController();
+  final phoneCtr = TextEditingController();
+  final titleCtr = TextEditingController();
 
   double zoom = 17.0;
 
@@ -73,21 +78,7 @@ class _LocationAddState extends State<LocationAdd> {
     }
   }
 
-  Set<Marker> myMarker = {
-    // Marker(
-    //   markerId: MarkerId("value1"),
-    //   position: LatLng(13.768566, 100.3425051),
-    //   infoWindow: InfoWindow(title: "${13.768566}, ${100.3425051}"),
-    //   icon: BitmapDescriptor.defaultMarker,
-    //   onTap: () {
-    //     log.i("value1 Tap!");
-    //   },
-    // ),
-    // const Marker(
-    //   markerId: MarkerId("value1"),
-    //   position: LatLng(13.768566, 100.34),
-    // ),
-  };
+  Set<Marker> myMarker = {};
 
   addMarker(LatLng point) async {
     log.i(point);
@@ -111,12 +102,12 @@ class _LocationAddState extends State<LocationAdd> {
       myMarker = {marker};
     });
 
-    final CameraPosition myLocation = CameraPosition(
-      target: LatLng(point.latitude, point.longitude),
-      zoom: zoom,
-    );
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+    // final CameraPosition myLocation = CameraPosition(
+    //   target: LatLng(point.latitude, point.longitude),
+    //   zoom: zoom,
+    // );
+    // final GoogleMapController controller = await _controller.future;
+    // await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
     // setState(() {});
   }
 
@@ -124,8 +115,10 @@ class _LocationAddState extends State<LocationAdd> {
   void initState() {
     super.initState();
 
-    // _goToYourLocation();
-    // showBottomSheet();
+    emailCtr.text = mainCtr.userModel.value.email;
+    nameCtr.text =
+        "${mainCtr.userModel.value.firstname} ${mainCtr.userModel.value.lastname}";
+    phoneCtr.text = mainCtr.userModel.value.phone;
   }
 
   @override
@@ -162,7 +155,7 @@ class _LocationAddState extends State<LocationAdd> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FloatingActionButton(
-                          child: Icon(Icons.pin_drop_rounded),
+                          child: const Icon(Icons.pin_drop_rounded),
                           onPressed: () {
                             _goToYourLocation();
                           },
@@ -171,16 +164,128 @@ class _LocationAddState extends State<LocationAdd> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FloatingActionButton(
-                          child: Icon(Icons.add),
+                          child: const Icon(Icons.add),
                           onPressed: () {
-                            mainCtr.addLocation(myPoint);
+                            // mainCtr.addLocation(myPoint);
+                            Get.bottomSheet(Container(
+                              height: 500,
+                              width: Get.width,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10, left: 10, right: 10),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      "เรื่อง".text.size(20).make(),
+                                      TextFormField(
+                                        controller: titleCtr,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey[800]),
+                                          hintText: "เรื่อง",
+                                          fillColor: Colors.white70,
+                                        ),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      "อีเมล".text.size(20).make(),
+                                      TextFormField(
+                                        controller: emailCtr,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey[800]),
+                                          hintText: "อีเมล",
+                                          fillColor: Colors.white70,
+                                        ),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      "ชื่อ".text.size(20).make(),
+                                      TextFormField(
+                                        controller: nameCtr,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey[800]),
+                                          hintText: "ชื่อ",
+                                          fillColor: Colors.white70,
+                                        ),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      "เบอร์โทร".text.size(20).make(),
+                                      TextFormField(
+                                        controller: phoneCtr,
+                                        keyboardType: TextInputType.phone,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey[800]),
+                                          hintText: "เบอร์โทร",
+                                          fillColor: Colors.white70,
+                                        ),
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              if (myMarker.isEmpty) {
+                                                mainCtr.snackError(
+                                                  title: "Error",
+                                                  msg: "กรุณาเลือกที่อยู่",
+                                                );
+                                                return;
+                                              }
+                                              await mainCtr.addLocation(
+                                                myPoint,
+                                                email: emailCtr.text,
+                                                name: nameCtr.text,
+                                                title: titleCtr.text,
+                                                phone: phoneCtr.text,
+                                              );
+                                              Get.back();
+                                            },
+                                            child: "แจ้งเหตุ".text.make(),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: "ยกเลิก".text.make(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ));
                           },
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: FloatingActionButton(
-                          child: Icon(Icons.delete),
+                          child: const Icon(Icons.delete),
                           onPressed: () {
                             setState(() {
                               myMarker = {};

@@ -30,10 +30,14 @@ class _HomePageState extends State<HomePage> {
       body: SizedBox(
         height: Get.height,
         width: Get.width,
-        child: const Stack(
+        child: Stack(
           children: [
-            Positioned(child: MapSample()),
-            Positioned.fill(
+            // Positioned(child: MapSample()),
+            Container(
+              color: const Color.fromARGB(255, 245, 245, 244),
+            ),
+
+            const Positioned.fill(
               child: HomeContent(),
             ),
           ],

@@ -2,7 +2,7 @@ import 'package:emergency_call_v2/models/enum.dart';
 
 class UserModel {
   String id = "";
-  String firstname = "สวัสดี";
+  String firstname = "";
   String lastname = "";
   Role role = Role.none;
   String email = "";

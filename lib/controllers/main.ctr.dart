@@ -97,12 +97,24 @@ class MainCtr extends GetxService {
     }
   }
 
-  addLocation(LatLng point) async {
+  Future<void> addLocation(
+    LatLng point, {
+    required String email,
+    required String name,
+    required String title,
+    required String phone,
+  }) async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       await docLocation.add({
+        'email': email,
+        'name': name,
+        'title': title,
+        'phone': phone,
+        'status': "waiting",
         'latitude': point.latitude,
         'longitude': point.longitude,
+        'createdAt': DateTime.now().toString()
       });
       await Future.delayed(const Duration(seconds: 1));
       getLoactions();
@@ -112,7 +124,7 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  getLoactions() async {
+  Future<void> getLoactions() async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       final r_locs = await docLocation.get();
@@ -122,6 +134,12 @@ class MainCtr extends GetxService {
                 id: e.id,
                 latitude: e['latitude'],
                 longitude: e['longitude'],
+                email: e['email'],
+                name: e['name'],
+                title: e['title'],
+                phone: e['phone'],
+                status: e['status'],
+                createdAt: e['createdAt'],
               ))
           .toList();
     } catch (e) {

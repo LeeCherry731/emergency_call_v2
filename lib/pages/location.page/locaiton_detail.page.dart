@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:emergency_call_v2/models/location.doc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LocationDetailPage extends StatefulWidget {
-  const LocationDetailPage({super.key});
+  final LocationDoc location;
+  const LocationDetailPage({super.key, required this.location});
 
   @override
   State<LocationDetailPage> createState() => _LocationDetailPageState();
@@ -23,6 +26,8 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
   );
 
   final location = Location();
+
+  Set<Marker> markers = {};
 
   Future<void> _goToYourLocation() async {
     var serviceEnabled = await location.serviceEnabled();
@@ -48,8 +53,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     log.i(currentLocation);
 
     final CameraPosition myLocation = CameraPosition(
-      target:
-          LatLng(currentLocation.latitude ?? 0, currentLocation.longitude ?? 0),
+      target: LatLng(widget.location.latitude, widget.location.longitude),
       zoom: 19.151926040649414,
     );
 
@@ -57,26 +61,51 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
   }
 
+  addMarker() async {
+    final id = Random().nextInt(10000);
+    await Future.delayed(const Duration(milliseconds: 250));
+
+    setState(() {
+      final Marker marker = Marker(
+        markerId: MarkerId("$id"),
+        position: LatLng(widget.location.latitude, widget.location.longitude),
+        infoWindow: const InfoWindow(title: "My Pin", snippet: '*'),
+        onTap: () {
+          log.i("$id Tap!");
+        },
+      );
+      markers = {marker};
+    });
+
+    // final CameraPosition myLocation = CameraPosition(
+    //   target: LatLng(point.latitude, point.longitude),
+    //   zoom: zoom,
+    // );
+    // final GoogleMapController controller = await _controller.future;
+    // await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+    // setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    _goToYourLocation();
+    addMarker();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: "ข้อมูล location".text.minFontSize(18).make(),
+        title: "ข้อมูล ${widget.location.name}".text.minFontSize(18).make(),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        log.i("floatingActionButton");
-      }),
       body: GoogleMap(
         mapType: MapType.hybrid,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
+        markers: markers,
       ),
     );
   }

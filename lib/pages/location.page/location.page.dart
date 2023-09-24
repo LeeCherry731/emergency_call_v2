@@ -24,7 +24,7 @@ class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: mainCtr.userModel.value.role == Role.admin
+      floatingActionButton: mainCtr.userModel.value.role == Role.staff
           ? null
           : FloatingActionButton(
               backgroundColor: Colors.white,

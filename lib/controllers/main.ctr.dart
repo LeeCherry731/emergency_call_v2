@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/models/location.doc.dart';
 import 'package:emergency_call_v2/models/user.model.dart';
 import 'package:emergency_call_v2/pages/main.page.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,6 +28,10 @@ final mainCtr = Get.put(MainCtr());
 class MainCtr extends GetxService {
   final docUser = FirebaseFirestore.instance.collection("users");
   final docLocation = FirebaseFirestore.instance.collection("locations");
+  final docNews = FirebaseFirestore.instance.collection("news");
+  final storageProfile = FirebaseStorage.instance.ref('profiles');
+  final storageLocation = FirebaseStorage.instance.ref('locations');
+  final storageNews = FirebaseStorage.instance.ref('news');
   final auth = FirebaseAuth.instance;
 
   final userModel = UserModel().obs;
@@ -34,7 +43,6 @@ class MainCtr extends GetxService {
     required String lastname,
     required String email,
     required String phone,
-    required String picture,
   }) async {
     try {
       final user = {
@@ -43,14 +51,44 @@ class MainCtr extends GetxService {
         "role": roleToString(Role.member),
         "email": email,
         "phone": phone,
-        "picture": picture,
+        "picture": "",
+        "createdAt": DateTime.now(),
+        "updatedAt": DateTime.now(),
       };
+      await docUser.add(user);
+      await Future.delayed(const Duration(seconds: 1));
+      await getUser(email: email);
+      Get.offAll(() => const MainPage());
+      // userDoc.snapshots().listen((event) {
+      //   log.i(event.data());
+      // });
+    } catch (e) {
+      log.e(e);
+      snackError(title: "firebase auth error", msg: e.toString());
+    }
+  }
 
-      final userDoc = await docUser.add(user);
-
-      userDoc.snapshots().listen((event) {
-        log.i(event.data());
-      });
+  Future getUser({required email}) async {
+    try {
+      final user = await docUser.get();
+      userModel.value = user.docs
+          .where((e) => e['email'] == email)
+          .map((e) {
+            final u = e.data();
+            log.i(u);
+            return UserModel()
+              ..id = e.id
+              ..email = u['email']
+              ..firstname = u['firstname']
+              ..lastname = u['lastname']
+              ..role = stringToRole(u['role'])
+              ..phone = u['phone']
+              ..picture = u['picture']
+              ..createdAt = u['createdAt'].toString()
+              ..updatedAt = u['updatedAt'].toString();
+          })
+          .toList()
+          .first;
     } catch (e) {
       log.e(e);
     }
@@ -62,12 +100,26 @@ class MainCtr extends GetxService {
   }) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-
+      await getUser(email: email);
       await Get.offAll(() => const MainPage());
     } catch (e) {
       log.e(e);
       snackError(title: "firebase auth error", msg: e.toString());
     }
+  }
+
+  Future logout() async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      await auth.signOut();
+      userModel.value = UserModel();
+      await Future.delayed(const Duration(seconds: 1));
+      Get.back();
+    } catch (e) {
+      log.e(e);
+      snackError(title: "firebase auth error", msg: e.toString());
+    }
+    SmartDialog.dismiss();
   }
 
   Future<void> register({
@@ -76,8 +128,9 @@ class MainCtr extends GetxService {
     required String firstname,
     required String lastname,
     required String phone,
-    required String picture,
   }) async {
+    SmartDialog.showLoading(msg: "Loading...");
+
     try {
       await auth.createUserWithEmailAndPassword(
         email: email,
@@ -88,13 +141,13 @@ class MainCtr extends GetxService {
         lastname: lastname,
         email: email,
         phone: phone,
-        picture: picture,
       );
       Get.offAll(() => const MainPage());
     } catch (e) {
       log.e(e);
       snackError(title: "firebase auth error", msg: e.toString());
     }
+    SmartDialog.dismiss();
   }
 
   Future<void> addLocation(
@@ -117,42 +170,73 @@ class MainCtr extends GetxService {
         'createdAt': DateTime.now().toString()
       });
       await Future.delayed(const Duration(seconds: 1));
-      getLoactions();
     } catch (e) {
       log.e(e);
     }
     SmartDialog.dismiss();
   }
 
-  Future<void> getLoactions() async {
-    SmartDialog.showLoading(msg: "Loading...");
+  Future uploadPicProfile() async {}
+  Future uploadPicLocaiton() async {}
+  Future addNews(
+      {required PlatformFile platformFile,
+      required String title,
+      required String address,
+      required String description}) async {
     try {
-      final r_locs = await docLocation.get();
-      log.i(r_locs.docs.length);
-      locs.value = r_locs.docs
-          .map((e) => LocationDoc(
-                id: e.id,
-                latitude: e['latitude'],
-                longitude: e['longitude'],
-                email: e['email'],
-                name: e['name'],
-                title: e['title'],
-                phone: e['phone'],
-                status: e['status'],
-                createdAt: e['createdAt'],
-              ))
-          .toList();
+      SmartDialog.showLoading(msg: "Loading...");
+
+      final path = platformFile.name;
+      final file = File(platformFile.path!);
+
+      final ref = storageNews.child(path);
+      final uploadTask = ref.putFile(file);
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      log.i(urlDownload);
+
+      await docNews.add({
+        'email': userModel.value.email,
+        'name': userModel.value.firstname,
+        'title': title,
+        'description': description,
+        'phone': userModel.value.phone,
+        'image': urlDownload,
+        'createdAt': DateTime.now().toString(),
+        'updatedAt': DateTime.now().toString(),
+      });
+
+      await Future.delayed(const Duration(seconds: 1));
+      Get.back();
     } catch (e) {
-      log.e(e);
+      log.e(e.toString());
     }
+
     SmartDialog.dismiss();
   }
 
   snackError({required title, required msg}) {
     log.i("snackError");
 
-    Get.snackbar(title, msg,
-        backgroundColor: const Color.fromARGB(255, 233, 45, 45),
-        colorText: Colors.white);
+    Get.snackbar(
+      title,
+      msg,
+      backgroundColor: const Color.fromARGB(255, 233, 45, 45),
+      colorText: Colors.white,
+    );
   }
+
+  // Future<void> getLostData() async {
+  //   final ImagePicker picker = ImagePicker();
+  //   final LostDataResponse response = await picker.retrieveLostData();
+  //   if (response.isEmpty) {
+  //     return;
+  //   }
+  //   final List<XFile>? files = response.files;
+  //   if (files != null) {
+  //     _handleLostFiles(files);
+  //   } else {
+  //     _handleError(response.exception);
+  //   }
+  // }
 }

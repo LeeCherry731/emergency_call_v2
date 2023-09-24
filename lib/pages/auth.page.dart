@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
-import 'package:emergency_call_v2/pages/main.page.dart';
+import 'package:emergency_call_v2/pages/camera.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,6 +36,9 @@ class _AuthPageState extends State<AuthPage> {
     setState(() {
       emailCtr.text = "admin@admin.com";
       passwordCtr.text = "@@admin@@admin@@";
+      firstnameCtr.text = "lee";
+      lastnameCtr.text = "souk";
+      phoneCtr.text = "098033933";
     });
     super.initState();
   }
@@ -45,8 +48,11 @@ class _AuthPageState extends State<AuthPage> {
     emailCtr.dispose();
     firstnameCtr.dispose();
     passwordCtr.dispose();
-
     super.dispose();
+  }
+
+  void carmera() {
+    Get.to(() => const CameraExampleHome());
   }
 
   @override
@@ -163,6 +169,16 @@ class _AuthPageState extends State<AuthPage> {
                             ? "Enter min. 6 characters"
                             : null,
                   ),
+                  // const SizedBox(height: 30),
+                  // if (authState == AuthState.registor)
+                  //   IconButton(
+                  //     onPressed: () {
+                  //       Get.to(
+                  //         () => const CameraExampleHome(),
+                  //       );
+                  //     },
+                  //     icon: const Icon(Icons.camera),
+                  //   ),
                   const SizedBox(height: 30),
                   if (authState == AuthState.login)
                     ElevatedButton(
@@ -210,22 +226,14 @@ class _AuthPageState extends State<AuthPage> {
                         setState(() {
                           loading = true;
                         });
-                        try {
-                          final result = await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                            email: emailCtr.text.trim(),
-                            password: passwordCtr.text.trim(),
-                          );
-                          if (result.isBlank == false) {
-                            result.user!
-                                .updateDisplayName(firstnameCtr.text.trim());
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          Get.showSnackbar(GetSnackBar(
-                            title: "เกิดข้อผิดพลาด",
-                            message: e.toString(),
-                          ));
-                        }
+
+                        mainCtr.register(
+                          email: emailCtr.text.trim(),
+                          password: passwordCtr.text.trim(),
+                          firstname: firstnameCtr.text.trim(),
+                          lastname: lastnameCtr.text.trim(),
+                          phone: phoneCtr.text.trim(),
+                        );
 
                         setState(() {
                           loading = false;

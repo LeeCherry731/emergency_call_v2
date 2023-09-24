@@ -5,7 +5,7 @@ import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/pages/contact.page.dart';
 import 'package:emergency_call_v2/pages/home.page.dart';
 import 'package:emergency_call_v2/pages/location.page/location.page.dart';
-import 'package:emergency_call_v2/pages/news.page.dart';
+import 'package:emergency_call_v2/pages/news.page/news.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -60,10 +60,12 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: mainCtr.userModel.value.firstname.text
-            .size(20)
-            .color(Colors.white)
-            .make(),
+        title: Obx(
+          () => mainCtr.userModel.value.firstname.text
+              .size(20)
+              .color(Colors.white)
+              .make(),
+        ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 207, 12, 129),
       ),
@@ -117,7 +119,9 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: "ออกจากระบบ".text.size(20).make(),
-                onTap: () {},
+                onTap: () {
+                  mainCtr.logout();
+                },
               ),
             ],
           ),

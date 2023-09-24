@@ -26,6 +26,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        mainCtr.getUser(email: "admin@admin.com");
+      }),
       backgroundColor: const Color.fromARGB(255, 221, 221, 221),
       body: SizedBox(
         height: Get.height,
@@ -33,8 +36,12 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             // Positioned(child: MapSample()),
-            Container(
-              color: const Color.fromARGB(255, 245, 245, 244),
+
+            Image.asset(
+              "assets/images/map.jpg",
+              width: Get.width,
+              height: Get.height,
+              fit: BoxFit.fill,
             ),
 
             const Positioned.fill(
@@ -115,7 +122,7 @@ class _HomeContentState extends State<HomeContent> {
           child: Column(
             children: [
               Card(
-                color: Colors.pinkAccent,
+                color: const Color.fromARGB(255, 255, 0, 85),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
@@ -133,12 +140,12 @@ class _HomeContentState extends State<HomeContent> {
                   title: options[0]
                       .text
                       .minFontSize(18)
-                      .color(Colors.black)
+                      .color(Colors.white)
                       .make(),
                 ),
               ),
               Card(
-                color: Colors.pinkAccent,
+                color: const Color.fromARGB(255, 255, 0, 85),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
@@ -156,12 +163,12 @@ class _HomeContentState extends State<HomeContent> {
                   title: options[1]
                       .text
                       .minFontSize(18)
-                      .color(Colors.black)
+                      .color(Colors.white)
                       .make(),
                 ),
               ),
               Card(
-                color: Colors.pinkAccent,
+                color: const Color.fromARGB(255, 255, 0, 85),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
@@ -179,7 +186,7 @@ class _HomeContentState extends State<HomeContent> {
                   title: options[2]
                       .text
                       .minFontSize(18)
-                      .color(Colors.black)
+                      .color(Colors.white)
                       .make(),
                 ),
               ),

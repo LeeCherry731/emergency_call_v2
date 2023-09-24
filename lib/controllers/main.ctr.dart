@@ -201,6 +201,7 @@ class MainCtr extends GetxService {
         'title': title,
         'description': description,
         'phone': userModel.value.phone,
+        'address': address,
         'image': urlDownload,
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),

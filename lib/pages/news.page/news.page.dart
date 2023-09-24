@@ -2,6 +2,7 @@ import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/models/news.model.dart';
 import 'package:emergency_call_v2/pages/news.page/news_add.page.dart';
+import 'package:emergency_call_v2/pages/news.page/news_detail.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -49,6 +50,7 @@ class _NewsPageState extends State<NewsPage> {
                   name: e['name'],
                   title: e['title'],
                   phone: e['phone'],
+                  address: e['address'],
                   image: e['image'],
                   description: e['description'],
                   createdAt: e['createdAt'],
@@ -65,45 +67,53 @@ class _NewsPageState extends State<NewsPage> {
             itemCount: news.length,
             itemBuilder: (context, i) {
               final n = news[i];
-              return Card(
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
+              return InkWell(
+                onTap: () {
+                  Get.to(() => NewsDetailPage(news: n));
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                ),
-                elevation: 10,
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          n.image,
-                          width: 100,
-                          height: 100,
+                  elevation: 10,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            n.image,
+                            width: 100,
+                            height: 100,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            "NewsPage $i".text.minFontSize(18).make(),
-                            "NewsPage $i".text.make(),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        "วันที่ $i".text.make(),
-                      ],
-                    ),
-                  ],
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              "ชื่อเรื่อง: ${n.title}"
+                                  .text
+                                  .minFontSize(18)
+                                  .make(),
+                              "ที่อยู่: ${n.address}".text.make(),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          "วันที่ ${n.getDate()}".text.make(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

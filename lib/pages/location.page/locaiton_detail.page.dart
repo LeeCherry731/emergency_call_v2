@@ -3,8 +3,11 @@ import 'dart:math';
 
 import 'package:emergency_call_v2/config.dart';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/models/location.doc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:get/get.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -98,6 +101,34 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
   }
 
+  Future<void> _goToUserLocation() async {
+    var serviceEnabled = await location.serviceEnabled();
+    debugPrint(serviceEnabled.toString());
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    var permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    debugPrint(permissionGranted.toString());
+
+    final CameraPosition myLocation = CameraPosition(
+      target: LatLng(widget.location.latitude, widget.location.longitude),
+      zoom: 13,
+    );
+
+    final GoogleMapController controller = await _controller.future;
+    await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+  }
+
   addMarker() async {
     await Future.delayed(const Duration(milliseconds: 250));
 
@@ -179,35 +210,6 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
       appBar: AppBar(
         title: "ข้อมูล ${widget.location.name}".text.minFontSize(18).make(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-            backgroundColor: Colors.green,
-            onPressed: () {
-              getIp();
-            },
-          ),
-          FloatingActionButton(
-            backgroundColor: Colors.red,
-            onPressed: () {
-              markMyLocation();
-            },
-          ),
-          FloatingActionButton(
-            backgroundColor: Colors.amber,
-            onPressed: () {
-              _goToMyLocation();
-            },
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              goToPoint();
-            },
-          ),
-        ],
-      ),
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
@@ -216,13 +218,63 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
         },
         polylines: {
           Polyline(
-            polylineId: PolylineId("route"),
+            polylineId: const PolylineId("route"),
             points: polylineCoordinates,
             color: Colors.blue,
           )
         },
         markers: markers,
       ),
+      bottomSheet: mainCtr.userModel.value.role != Role.staff
+          ? null
+          : SizedBox(
+              height: 220,
+              width: Get.width,
+              child: Padding(
+                  padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          SmartDialog.showLoading(msg: "Loading...");
+                          await _goToUserLocation();
+                          SmartDialog.dismiss();
+                        },
+                        child: "ตำแหน่งขอความช่วยเหลือ".text.make(),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          SmartDialog.showLoading(msg: "Loading...");
+                          await _goToMyLocation();
+                          SmartDialog.dismiss();
+                        },
+                        child: "ตำแหน่งของฉัน".text.make(),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        onPressed: () async {},
+                        child: "คำนวนเส้นทาง".text.make(),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        onPressed: () async {
+                          SmartDialog.showLoading(msg: "Loading...");
+                          mainCtr.staffChooseLocation(id: widget.location.id);
+                          SmartDialog.dismiss();
+                        },
+                        child: "เลือก".text.make(),
+                      ),
+                    ],
+                  )),
+            ),
     );
   }
 }

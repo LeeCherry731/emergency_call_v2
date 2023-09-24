@@ -29,6 +29,7 @@ class MainCtr extends GetxService {
   final docUser = FirebaseFirestore.instance.collection("users");
   final docLocation = FirebaseFirestore.instance.collection("locations");
   final docNews = FirebaseFirestore.instance.collection("news");
+  final docContacts = FirebaseFirestore.instance.collection("contacts");
   final storageProfile = FirebaseStorage.instance.ref('profiles');
   final storageLocation = FirebaseStorage.instance.ref('locations');
   final storageNews = FirebaseStorage.instance.ref('news');
@@ -52,8 +53,8 @@ class MainCtr extends GetxService {
         "email": email,
         "phone": phone,
         "picture": "",
-        "createdAt": DateTime.now(),
-        "updatedAt": DateTime.now(),
+        "createdAt": DateTime.now().toString(),
+        "updatedAt": DateTime.now().toString(),
       };
       await docUser.add(user);
       await Future.delayed(const Duration(seconds: 1));
@@ -176,7 +177,39 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  Future uploadPicProfile() async {}
+  Future uploadDateProfile({required PlatformFile platformFile}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      final path = platformFile.name;
+      final file = File(platformFile.path!);
+
+      final ref = storageProfile.child(path);
+      final uploadTask = ref.putFile(file);
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      log.i(urlDownload);
+
+      docUser.doc(userModel.value.id).update({"picture": urlDownload});
+      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future staffChooseLocation({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docLocation.doc(id).update({"status": "going"});
+      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
   Future uploadPicLocaiton() async {}
   Future addNews(
       {required PlatformFile platformFile,

@@ -35,6 +35,9 @@ class LocationDoc {
       case "waiting":
         data = "รอความช่วยเหลือ";
         break;
+      case "going":
+        data = "เจ้าหน้าที่กำลังไป";
+        break;
       case "success":
         data = "ช่วยเหลือสำเร็จ";
         break;
@@ -53,7 +56,10 @@ class LocationDoc {
 
     switch (status) {
       case "waiting":
-        data = Color.fromARGB(255, 231, 178, 2);
+        data = Colors.yellow;
+        break;
+      case "going":
+        data = Colors.orange;
         break;
       case "success":
         data = Colors.green;

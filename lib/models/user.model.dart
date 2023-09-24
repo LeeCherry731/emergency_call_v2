@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 
 class UserModel {
@@ -26,5 +27,10 @@ class UserModel {
     u.createdAt = json["createdAt"];
     u.updatedAt = json["updatedAt"];
     return u;
+  }
+
+  String getDate() {
+    final date = DateTime.parse(createdAt);
+    return "${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute}:${date.second}";
   }
 }

@@ -131,12 +131,16 @@ class _LocationPageState extends State<LocationPage> {
                               },
                               child: "ดู".text.make(),
                             ),
-                            "สถานะ".text.size(10).make(),
-                            "${loc.getStatus()}"
-                                .text
-                                .size(10)
-                                .color(loc.getColor())
-                                .make(),
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              color: loc.getColor(),
+                              child: Column(
+                                children: [
+                                  "สถานะ".text.size(10).make(),
+                                  loc.getStatus().text.size(10).make(),
+                                ],
+                              ),
+                            ),
                           ],
                         )
                       ],

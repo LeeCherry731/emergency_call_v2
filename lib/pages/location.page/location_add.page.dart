@@ -69,15 +69,6 @@ class _LocationAddState extends State<LocationAdd> {
     SmartDialog.dismiss();
   }
 
-  void showBottomSheet() async {
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      Get.bottomSheet(Container(
-        color: Colors.amber,
-      ));
-    }
-  }
-
   Set<Marker> myMarker = {};
 
   addMarker(LatLng point) async {

@@ -1,3 +1,5 @@
+import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/pages/about.page/account.page.dart';
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,16 @@ class _AboutPageState extends State<AboutPage> {
               height: 80,
               child: Center(
                 child: ListTile(
-                  onTap: () => {Get.to(() => const AccountPage())},
+                  onTap: () {
+                    if (mainCtr.userModel.value.role == Role.none) {
+                      Get.defaultDialog(
+                        title: "ไม่สามารถดูข้อมูลส่วนตัวได้",
+                        middleText: "กรุณาเข้าสู่ระบบ",
+                      );
+                      return;
+                    }
+                    Get.to(() => const AccountPage());
+                  },
                   title: "บัญชีผู้ใช้".text.minFontSize(22).make(),
                   leading: const CircleAvatar(
                     child: Icon(
@@ -135,8 +146,9 @@ class _AboutPageState extends State<AboutPage> {
                                       50,
                                     ),
                                   ),
-                                  onPressed: () =>
-                                      {Get.offAll(() => const AuthPage())},
+                                  onPressed: () {
+                                    mainCtr.logout();
+                                  },
                                   child: "ยืนยัน".text.minFontSize(20).make(),
                                 ),
                                 TextButton(

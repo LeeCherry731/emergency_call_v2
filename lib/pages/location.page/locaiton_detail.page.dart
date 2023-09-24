@@ -269,6 +269,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                           SmartDialog.showLoading(msg: "Loading...");
                           mainCtr.staffChooseLocation(id: widget.location.id);
                           SmartDialog.dismiss();
+                          Get.back();
                         },
                         child: "เลือก".text.make(),
                       ),

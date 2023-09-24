@@ -26,9 +26,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        mainCtr.getUser(email: "admin@admin.com");
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   mainCtr.getUser(email: "admin@admin.com");
+      // }),
       backgroundColor: const Color.fromARGB(255, 221, 221, 221),
       body: SizedBox(
         height: Get.height,

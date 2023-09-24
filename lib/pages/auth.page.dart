@@ -4,6 +4,7 @@ import 'package:emergency_call_v2/pages/camera.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 enum AuthState {
   login,
@@ -31,13 +32,28 @@ class _AuthPageState extends State<AuthPage> {
   bool loading = false;
   bool showPassword = true;
 
+  staff() {
+    emailCtr.text = "staff@staff.com";
+    passwordCtr.text = "@@admin@@admin@@";
+  }
+
+  admin() {
+    emailCtr.text = "admin@admin.com";
+    passwordCtr.text = "@@admin@@admin@@";
+  }
+
+  member() {
+    emailCtr.text = "member@member.com";
+    passwordCtr.text = "member123";
+  }
+
   @override
   void initState() {
     setState(() {
       emailCtr.text = "admin@admin.com";
       passwordCtr.text = "@@admin@@admin@@";
-      firstnameCtr.text = "lee";
-      lastnameCtr.text = "souk";
+      firstnameCtr.text = "test1";
+      lastnameCtr.text = "test2";
       phoneCtr.text = "098033933";
     });
     super.initState();
@@ -81,6 +97,29 @@ class _AuthPageState extends State<AuthPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          admin();
+                        },
+                        child: "admin".text.make(),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          staff();
+                        },
+                        child: "staff".text.make(),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          member();
+                        },
+                        child: "member".text.make(),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 30),
                   TextFormField(
                     controller: emailCtr,

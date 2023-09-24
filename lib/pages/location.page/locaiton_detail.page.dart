@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
@@ -99,6 +100,8 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
 
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
+
+    await markMyLocation();
   }
 
   Future<void> _goToUserLocation() async {
@@ -129,7 +132,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     await controller.animateCamera(CameraUpdate.newCameraPosition(myLocation));
   }
 
-  addMarker() async {
+  Future addMarker() async {
     await Future.delayed(const Duration(milliseconds: 250));
 
     setState(() {
@@ -143,7 +146,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     });
   }
 
-  markMyLocation() async {
+  Future markMyLocation() async {
     await Future.delayed(const Duration(milliseconds: 250));
 
     setState(() {
@@ -160,7 +163,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     });
   }
 
-  Future<void> goToPoint() async {
+  Future<void> findRoute() async {
     final PolylinePoints poly = PolylinePoints();
 
     final from = PointLatLng(
@@ -173,7 +176,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     );
 
     final PolylineResult result = await poly.getRouteBetweenCoordinates(
-        "AIzaSyBG1czcWgot1iEkNTFkz2Bg_BAZueBvaiM", from, to);
+        "AIzaSyAn4CzG9IwSiFHxu_hMxFNL66fnJYgQMaA", from, to);
 
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
@@ -209,6 +212,15 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: "ข้อมูล ${widget.location.name}".text.minFontSize(18).make(),
+        actions: [
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: widget.location.getColor(),
+            ),
+            child: "${widget.location.getStatus()}".text.make(),
+          )
+        ],
       ),
       body: GoogleMap(
         mapType: MapType.normal,
@@ -228,53 +240,107 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
       bottomSheet: mainCtr.userModel.value.role != Role.staff
           ? null
           : SizedBox(
-              height: 220,
+              height: 300,
               width: Get.width,
               child: Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 3,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ElevatedButton(
+                      "เรื่อง: ${widget.location.title}".text.make(),
+                      "ชื่อ: ${widget.location.name}".text.make(),
+                      "อีเมล: ${widget.location.email}".text.make(),
+                      "lat: ${widget.location.latitude}".text.make(),
+                      "long: ${widget.location.longitude}".text.make(),
+                      TextButton(
                         onPressed: () async {
-                          SmartDialog.showLoading(msg: "Loading...");
-                          await _goToUserLocation();
-                          SmartDialog.dismiss();
+                          final Uri launchUri = Uri(
+                            scheme: 'tel',
+                            path: widget.location.phone,
+                          );
+                          await launchUrl(launchUri);
                         },
-                        child: "ตำแหน่งขอความช่วยเหลือ".text.make(),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          SmartDialog.showLoading(msg: "Loading...");
-                          await _goToMyLocation();
-                          SmartDialog.dismiss();
-                        },
-                        child: "ตำแหน่งของฉัน".text.make(),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.phone),
+                            const SizedBox(width: 10),
+                            "เบอร์: ${widget.location.phone}"
+                                .text
+                                .underline
+                                .make(),
+                          ],
                         ),
-                        onPressed: () async {},
-                        child: "คำนวนเส้นทาง".text.make(),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        onPressed: () async {
-                          SmartDialog.showLoading(msg: "Loading...");
-                          mainCtr.staffChooseLocation(id: widget.location.id);
-                          SmartDialog.dismiss();
-                          Get.back();
-                        },
-                        child: "เลือก".text.make(),
+                      const Divider(),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    SmartDialog.showLoading(msg: "Loading...");
+                                    await _goToUserLocation();
+                                    SmartDialog.dismiss();
+                                  },
+                                  child: "ตำแหน่งขอความช่วยเหลือ".text.make(),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    SmartDialog.showLoading(msg: "Loading...");
+                                    await _goToMyLocation();
+                                    SmartDialog.dismiss();
+                                  },
+                                  child: "ตำแหน่งของฉัน".text.make(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                  ),
+                                  onPressed: () async {
+                                    await findRoute();
+                                  },
+                                  child: "คำนวนเส้นทาง".text.make(),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    SmartDialog.showLoading(msg: "Loading...");
+                                    mainCtr.staffChooseLocation(
+                                        id: widget.location.id);
+                                    SmartDialog.dismiss();
+                                    Get.back();
+                                  },
+                                  child: "เลือก".text.make(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
-                  )),
+                  ),
+                ),
+              ),
             ),
     );
   }

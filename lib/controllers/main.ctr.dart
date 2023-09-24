@@ -115,7 +115,7 @@ class MainCtr extends GetxService {
       await auth.signOut();
       userModel.value = UserModel();
       await Future.delayed(const Duration(seconds: 1));
-      Get.back();
+      Get.offAll(() => const MainPage());
     } catch (e) {
       log.e(e);
       snackError(title: "firebase auth error", msg: e.toString());

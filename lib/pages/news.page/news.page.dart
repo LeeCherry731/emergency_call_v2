@@ -57,6 +57,11 @@ class _NewsPageState extends State<NewsPage> {
                   updatedAt: e['updatedAt'],
                 ),
               )
+              .sortedBy(
+                (a, b) => DateTime.parse(b.createdAt).compareTo(
+                  DateTime.parse(a.createdAt),
+                ),
+              )
               .toList();
 
           if (news.isEmpty) {

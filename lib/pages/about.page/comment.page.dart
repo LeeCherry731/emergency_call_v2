@@ -1,7 +1,6 @@
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/models/comment.model.dart';
 import 'package:emergency_call_v2/models/enum.dart';
-import 'package:emergency_call_v2/pages/news.page/news_add.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -22,19 +21,6 @@ class _NewsPageState extends State<CommentPage> {
       appBar: AppBar(
         title: "Comment".text.make(),
       ),
-      floatingActionButton: mainCtr.userModel.value.role != Role.admin
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Colors.white,
-              onPressed: () {
-                Get.to(() => const NewsAddPage());
-              },
-              child: const Icon(
-                Icons.plus_one,
-                color: Colors.black,
-                size: 35,
-              ),
-            ),
       backgroundColor: const Color.fromARGB(255, 228, 228, 228),
       body: StreamBuilder(
         stream: mainCtr.docComments.snapshots(),
@@ -144,32 +130,34 @@ class _NewsPageState extends State<CommentPage> {
           );
         },
       ),
-      bottomSheet: SizedBox(
-        height: 60,
-        width: Get.width,
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: titleCtr,
+      bottomSheet: mainCtr.userModel.value.role == Role.none
+          ? null
+          : SizedBox(
+              height: 60,
+              width: Get.width,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: titleCtr,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      if (titleCtr.text.trim() == "") {
+                        return;
+                      }
+                      await mainCtr.addComment(title: titleCtr.text.trim());
+                      titleCtr.clear();
+                    },
+                    icon: const Icon(
+                      Icons.send,
+                      color: Colors.purple,
+                    ),
+                  )
+                ],
               ),
             ),
-            IconButton(
-              onPressed: () async {
-                if (titleCtr.text.trim() == "") {
-                  return;
-                }
-                await mainCtr.addComment(title: titleCtr.text.trim());
-                titleCtr.clear();
-              },
-              icon: const Icon(
-                Icons.send,
-                color: Colors.purple,
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/pages/about.page/about.page.dart';
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/pages/contact.page/contact.page.dart';
@@ -18,35 +19,36 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<TabItem> items = const [
-    TabItem(
+  List<TabItem> items = [
+    const TabItem(
       icon: Icons.home,
       title: 'Home',
     ),
-    TabItem(
-      icon: Icons.pin_drop,
-      title: 'Location',
-    ),
-    TabItem(
+    if (mainCtr.userModel.value.role != Role.none)
+      const TabItem(
+        icon: Icons.pin_drop,
+        title: 'Location',
+      ),
+    const TabItem(
       icon: Icons.newspaper,
       title: 'News',
     ),
-    TabItem(
+    const TabItem(
       icon: Icons.account_box,
       title: 'Contact',
     ),
-    TabItem(
+    const TabItem(
       icon: Icons.person_2,
       title: 'About',
     ),
   ];
 
-  final pages = const [
-    HomePage(),
-    LocationPage(),
-    NewsPage(),
-    ContactPage(),
-    AboutPage(),
+  final pages = [
+    const HomePage(),
+    if (mainCtr.userModel.value.role != Role.none) const LocationPage(),
+    const NewsPage(),
+    const ContactPage(),
+    const AboutPage(),
   ];
 
   int indexPage = 0;

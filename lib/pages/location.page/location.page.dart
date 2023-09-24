@@ -24,7 +24,7 @@ class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: mainCtr.userModel.value.role != Role.admin
+      floatingActionButton: mainCtr.userModel.value.role == Role.admin
           ? null
           : FloatingActionButton(
               backgroundColor: Colors.white,
@@ -59,6 +59,11 @@ class _LocationPageState extends State<LocationPage> {
                   phone: e['phone'],
                   status: e['status'],
                   createdAt: e['createdAt'],
+                ),
+              )
+              .sortedBy(
+                (a, b) => DateTime.parse(b.createdAt).compareTo(
+                  DateTime.parse(a.createdAt),
                 ),
               )
               .toList();

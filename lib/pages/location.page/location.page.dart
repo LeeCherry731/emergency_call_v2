@@ -58,6 +58,7 @@ class _LocationPageState extends State<LocationPage> {
                   title: e['title'],
                   phone: e['phone'],
                   status: e['status'],
+                  picture: e['picture'],
                   createdAt: e['createdAt'],
                 ),
               )
@@ -78,79 +79,85 @@ class _LocationPageState extends State<LocationPage> {
               final loc = locs[i];
               return Column(
                 children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                       ),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    elevation: 10,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              "assets/images/emergency_pic1.jpg",
-                              width: Get.width * 0.3,
+                      elevation: 10,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                loc.picture,
+                                width: 100,
+                                height: 100,
+                              ),
                             ),
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                "เรื่อง : ${loc.title}"
-                                    .text
-                                    .minFontSize(14)
-                                    .make(),
-                                "ชื่อ : ${loc.name}".text.size(8).make(),
-                                "อีเมล : ${loc.email}".text.size(8).make(),
-                                "เบอร์ : ${loc.phone}".text.size(8).make(),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            "เวลา : ${loc.getDate()}".text.size(9).make(),
-                            "Lat : ${loc.latitude}".text.size(8).make(),
-                            "Long : ${loc.longitude}".text.size(8).make(),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.purple,
-                              ),
-                              onPressed: () {
-                                Get.to(() => LocationDetailPage(location: loc));
-                              },
-                              child: "ดู".text.make(),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: loc.getColor(),
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Column(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  "สถานะ".text.size(10).make(),
-                                  loc.getStatus().text.size(10).make(),
+                                  "เรื่อง : ${loc.title}"
+                                      .text
+                                      .minFontSize(14)
+                                      .make(),
+                                  "ชื่อ : ${loc.name}".text.size(8).make(),
+                                  "อีเมล : ${loc.email}".text.size(8).make(),
+                                  "เบอร์ : ${loc.phone}".text.size(8).make(),
                                 ],
                               ),
-                            ),
-                          ],
-                        )
-                      ],
+                              const SizedBox(height: 10),
+                              "เวลา : ${loc.getDate()}".text.size(9).make(),
+                              "Lat : ${loc.latitude}".text.size(8).make(),
+                              "Long : ${loc.longitude}".text.size(8).make(),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.purple,
+                                ),
+                                onPressed: () {
+                                  Get.to(
+                                      () => LocationDetailPage(location: loc));
+                                },
+                                child: "ดู".text.make(),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    color: loc.getColor(),
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Column(
+                                  children: [
+                                    "สถานะ".text.size(10).make(),
+                                    loc.getStatus().text.size(10).make(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   if (mainCtr.locs.length == (i + 1))

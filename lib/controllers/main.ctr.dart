@@ -157,20 +157,32 @@ class MainCtr extends GetxService {
     required String name,
     required String title,
     required String phone,
+    required PlatformFile platformFile,
   }) async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
+      final path = platformFile.name;
+      final file = File(platformFile.path!);
+
+      final ref = storageLocation.child(path);
+      final uploadTask = ref.putFile(file);
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final urlDownload = await snapshot.ref.getDownloadURL();
+      log.i(urlDownload);
+
       await docLocation.add({
         'email': email,
         'name': name,
         'title': title,
         'phone': phone,
         'status': "waiting",
+        'picture': urlDownload,
         'latitude': point.latitude,
         'longitude': point.longitude,
         'createdAt': DateTime.now().toString()
       });
       await Future.delayed(const Duration(seconds: 1));
+      Get.back();
     } catch (e) {
       log.e(e);
     }
@@ -229,12 +241,36 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  Future uploadPicLocaiton() async {}
-  Future addNews(
-      {required PlatformFile platformFile,
-      required String title,
-      required String address,
-      required String description}) async {
+  Future approveNews({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docNews.doc(id).update({"status": "approved"});
+      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future disapproveNews({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docNews.doc(id).update({"status": "disapproved"});
+      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future addNews({
+    required PlatformFile platformFile,
+    required String title,
+    required String address,
+    required String description,
+  }) async {
     try {
       SmartDialog.showLoading(msg: "Loading...");
 
@@ -254,6 +290,7 @@ class MainCtr extends GetxService {
         'description': description,
         'phone': userModel.value.phone,
         'address': address,
+        'status': "none",
         'image': urlDownload,
         'createdAt': DateTime.now().toString(),
         'updatedAt': DateTime.now().toString(),

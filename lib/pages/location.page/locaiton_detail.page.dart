@@ -248,29 +248,56 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      "เรื่อง: ${widget.location.title}".text.make(),
-                      "ชื่อ: ${widget.location.name}".text.make(),
-                      "อีเมล: ${widget.location.email}".text.make(),
-                      "lat: ${widget.location.latitude}".text.make(),
-                      "long: ${widget.location.longitude}".text.make(),
-                      TextButton(
-                        onPressed: () async {
-                          final Uri launchUri = Uri(
-                            scheme: 'tel',
-                            path: widget.location.phone,
-                          );
-                          await launchUrl(launchUri);
-                        },
-                        child: Row(
-                          children: [
-                            const Icon(Icons.phone),
-                            const SizedBox(width: 10),
-                            "เบอร์: ${widget.location.phone}"
-                                .text
-                                .underline
-                                .make(),
-                          ],
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              "เรื่อง: ${widget.location.title}".text.make(),
+                              "ชื่อ: ${widget.location.name}".text.make(),
+                              "อีเมล: ${widget.location.email}".text.make(),
+                              "lat: ${widget.location.latitude}".text.make(),
+                              "long: ${widget.location.longitude}".text.make(),
+                              TextButton(
+                                onPressed: () async {
+                                  final Uri launchUri = Uri(
+                                    scheme: 'tel',
+                                    path: widget.location.phone,
+                                  );
+                                  await launchUrl(launchUri);
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.phone),
+                                    const SizedBox(width: 10),
+                                    "เบอร์: ${widget.location.phone}"
+                                        .text
+                                        .underline
+                                        .make(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Stack(
+                              children: [
+                                Card(
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.network(
+                                      widget.location.picture,
+                                      height: 200,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const Divider(),
                       Column(

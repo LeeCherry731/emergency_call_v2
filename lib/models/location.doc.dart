@@ -9,6 +9,7 @@ class LocationDoc {
   final String title;
   final String phone;
   final String status;
+  final String picture;
   final String createdAt;
 
   LocationDoc({
@@ -20,6 +21,7 @@ class LocationDoc {
     required this.title,
     required this.phone,
     required this.status,
+    required this.picture,
     required this.createdAt,
   });
 
@@ -56,7 +58,7 @@ class LocationDoc {
 
     switch (status) {
       case "waiting":
-        data = Colors.yellow;
+        data = const Color.fromARGB(255, 227, 204, 0);
         break;
       case "going":
         data = Colors.orange;

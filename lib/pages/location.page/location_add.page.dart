@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
@@ -102,6 +104,8 @@ class _LocationAddState extends State<LocationAdd> {
     // setState(() {});
   }
 
+  PlatformFile? pickedFile;
+
   @override
   void initState() {
     super.initState();
@@ -159,7 +163,7 @@ class _LocationAddState extends State<LocationAdd> {
                           onPressed: () {
                             // mainCtr.addLocation(myPoint);
                             Get.bottomSheet(Container(
-                              height: 500,
+                              height: 650,
                               width: Get.width,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -246,12 +250,20 @@ class _LocationAddState extends State<LocationAdd> {
                                                 );
                                                 return;
                                               }
+                                              if (pickedFile == null) {
+                                                mainCtr.snackError(
+                                                  title: "Error",
+                                                  msg: "กรุณาเลือกรูปภาพ",
+                                                );
+                                                return;
+                                              }
                                               await mainCtr.addLocation(
                                                 myPoint,
                                                 email: emailCtr.text,
                                                 name: nameCtr.text,
                                                 title: titleCtr.text,
                                                 phone: phoneCtr.text,
+                                                platformFile: pickedFile!,
                                               );
                                               Get.back();
                                             },
@@ -308,6 +320,65 @@ class _LocationAddState extends State<LocationAdd> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                if (pickedFile == null)
+                  Card(
+                    elevation: 10,
+                    child: InkWell(
+                      onTap: () async {
+                        final pic = await FilePicker.platform.pickFiles();
+                        if (pic == null) return;
+                        pickedFile = pic.files.first;
+                        setState(() {});
+                      },
+                      child: const Icon(
+                        Icons.image_search_rounded,
+                        size: 100,
+                        color: Color.fromARGB(255, 131, 131, 131),
+                      ),
+                    ),
+                  ),
+                if (pickedFile != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        Card(
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.file(
+                              File(pickedFile!.path!),
+                              height: 200,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                pickedFile = null;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.delete_sharp,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             ),
           ),
         ],

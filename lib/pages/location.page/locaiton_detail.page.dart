@@ -211,7 +211,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: "ข้อมูล ${widget.location.name}".text.minFontSize(18).make(),
+        title: "ข้อมูล ${widget.location.title}".text.minFontSize(18).make(),
         actions: [
           ElevatedButton(
             onPressed: () {},
@@ -240,7 +240,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
       bottomSheet: mainCtr.userModel.value.role != Role.staff
           ? null
           : SizedBox(
-              height: 300,
+              height: 320,
               width: Get.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -348,7 +348,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                 flex: 1,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: Colors.orange,
                                   ),
                                   onPressed: () async {
                                     SmartDialog.showLoading(msg: "Loading...");
@@ -362,6 +362,41 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                               ),
                             ],
                           ),
+                          if (widget.location.status == "going")
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                    ),
+                                    onPressed: () async {
+                                      mainCtr.staffSuccess(
+                                          id: widget.location.id);
+                                    },
+                                    child:
+                                        "ยืนยันการช่วยเหลือสำเร็จ".text.make(),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    onPressed: () async {
+                                      mainCtr.staffFailed(
+                                          id: widget.location.id);
+                                    },
+                                    child: "ยืนยันการช่วยเหลือไม่สำเร็จ"
+                                        .text
+                                        .make(),
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ],

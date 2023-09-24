@@ -1,11 +1,6 @@
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/models/contact.model.dart';
-import 'package:emergency_call_v2/models/enum.dart';
-import 'package:emergency_call_v2/models/news.model.dart';
-import 'package:emergency_call_v2/pages/news.page/news_add.page.dart';
-import 'package:emergency_call_v2/pages/news.page/news_detail.page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 

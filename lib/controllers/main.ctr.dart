@@ -233,7 +233,30 @@ class MainCtr extends GetxService {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docLocation.doc(id).update({"status": "going"});
-      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future staffSuccess({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docLocation.doc(id).update({"status": "success"});
+      Get.back();
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future staffFailed({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docLocation.doc(id).update({"status": "failed"});
+      Get.back();
     } catch (e) {
       log.e(e.toString());
     }

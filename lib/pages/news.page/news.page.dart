@@ -102,7 +102,7 @@ class _NewsPageState extends State<NewsPage> {
                                 backgroundColor: const Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
-                                label: 'Delete',
+                                label: 'DisApprove',
                               ),
                             if (mainCtr.userModel.value.role == Role.admin)
                               SlidableAction(

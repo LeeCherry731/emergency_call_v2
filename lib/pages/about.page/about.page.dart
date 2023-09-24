@@ -1,6 +1,7 @@
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/pages/about.page/account.page.dart';
+import 'package:emergency_call_v2/pages/about.page/comment.page.dart';
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -81,6 +82,9 @@ class _AboutPageState extends State<AboutPage> {
               height: 80,
               child: Center(
                 child: ListTile(
+                  onTap: () {
+                    Get.to(() => const CommentPage());
+                  },
                   title: "Feedback".text.minFontSize(22).make(),
                   leading: const CircleAvatar(
                     child: Icon(

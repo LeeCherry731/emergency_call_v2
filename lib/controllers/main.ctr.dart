@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -30,6 +29,7 @@ class MainCtr extends GetxService {
   final docLocation = FirebaseFirestore.instance.collection("locations");
   final docNews = FirebaseFirestore.instance.collection("news");
   final docContacts = FirebaseFirestore.instance.collection("contacts");
+  final docComments = FirebaseFirestore.instance.collection("comments");
   final storageProfile = FirebaseStorage.instance.ref('profiles');
   final storageLocation = FirebaseStorage.instance.ref('locations');
   final storageNews = FirebaseStorage.instance.ref('news');
@@ -168,6 +168,25 @@ class MainCtr extends GetxService {
         'status': "waiting",
         'latitude': point.latitude,
         'longitude': point.longitude,
+        'createdAt': DateTime.now().toString()
+      });
+      await Future.delayed(const Duration(seconds: 1));
+    } catch (e) {
+      log.e(e);
+    }
+    SmartDialog.dismiss();
+  }
+
+  Future<void> addComment({
+    required String title,
+  }) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      await docComments.add({
+        'email': userModel.value.email,
+        'name': userModel.value.firstname,
+        'picture': userModel.value.picture,
+        'description': title,
         'createdAt': DateTime.now().toString()
       });
       await Future.delayed(const Duration(seconds: 1));

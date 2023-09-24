@@ -133,7 +133,9 @@ class _LocationPageState extends State<LocationPage> {
                             ),
                             Container(
                               padding: const EdgeInsets.all(2),
-                              color: loc.getColor(),
+                              decoration: BoxDecoration(
+                                  color: loc.getColor(),
+                                  borderRadius: BorderRadius.circular(8)),
                               child: Column(
                                 children: [
                                   "สถานะ".text.size(10).make(),

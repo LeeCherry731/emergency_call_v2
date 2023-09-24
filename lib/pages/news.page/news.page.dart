@@ -19,9 +19,9 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: mainCtr.userModel.value.role != Role.admin
-          ? null
-          : FloatingActionButton(
+      floatingActionButton: mainCtr.userModel.value.role == Role.admin ||
+              mainCtr.userModel.value.role == Role.member
+          ? FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
                 Get.to(() => const NewsAddPage());
@@ -31,7 +31,8 @@ class _NewsPageState extends State<NewsPage> {
                 color: Colors.black,
                 size: 35,
               ),
-            ),
+            )
+          : null,
       backgroundColor: const Color.fromARGB(255, 228, 228, 228),
       body: StreamBuilder(
         stream: mainCtr.docNews.snapshots(),
@@ -93,24 +94,36 @@ class _NewsPageState extends State<NewsPage> {
                         endActionPane: ActionPane(
                           motion: const StretchMotion(),
                           children: [
-                            SlidableAction(
-                              onPressed: (v) {
-                                mainCtr.disapproveNews(id: n.id);
-                              },
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            ),
-                            SlidableAction(
-                              onPressed: (v) {
-                                mainCtr.approveNews(id: n.id);
-                              },
-                              backgroundColor: const Color(0xFF21B7CA),
-                              foregroundColor: Colors.white,
-                              icon: Icons.check,
-                              label: 'Approved',
-                            ),
+                            if (mainCtr.userModel.value.role == Role.admin)
+                              SlidableAction(
+                                onPressed: (v) {
+                                  mainCtr.disapproveNews(id: n.id);
+                                },
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                            if (mainCtr.userModel.value.role == Role.admin)
+                              SlidableAction(
+                                onPressed: (v) {
+                                  mainCtr.approveNews(id: n.id);
+                                },
+                                backgroundColor: const Color(0xFF21B7CA),
+                                foregroundColor: Colors.white,
+                                icon: Icons.check,
+                                label: 'Approved',
+                              ),
+                            if (mainCtr.userModel.value.role != Role.admin)
+                              SlidableAction(
+                                onPressed: (v) {
+                                  Get.to(() => NewsDetailPage(news: n));
+                                },
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                icon: Icons.check,
+                                label: 'อ่าน',
+                              ),
                           ],
                         ),
                         child: SizedBox(

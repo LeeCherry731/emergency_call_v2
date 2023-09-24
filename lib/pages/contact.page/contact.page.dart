@@ -22,19 +22,6 @@ class _NewsPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: mainCtr.userModel.value.role != Role.admin
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Colors.white,
-              onPressed: () {
-                Get.to(() => const NewsAddPage());
-              },
-              child: const Icon(
-                Icons.plus_one,
-                color: Colors.black,
-                size: 35,
-              ),
-            ),
       backgroundColor: const Color.fromARGB(255, 228, 228, 228),
       body: StreamBuilder(
         stream: mainCtr.docContacts.snapshots(),

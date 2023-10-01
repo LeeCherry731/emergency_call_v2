@@ -104,6 +104,12 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                       Row(
                         children: [
+                          "สถานะ : ".text.size(18).make(),
+                          mainCtr.userModel.value.status.text.size(18).make(),
+                        ],
+                      ),
+                      Row(
+                        children: [
                           "ชื่อจริง : ".text.size(18).make(),
                           mainCtr.userModel.value.firstname.text
                               .size(18)

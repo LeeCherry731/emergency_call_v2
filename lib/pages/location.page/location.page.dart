@@ -137,6 +137,17 @@ class _LocationPageState extends State<LocationPage> {
                                   backgroundColor: Colors.purple,
                                 ),
                                 onPressed: () {
+                                  if (mainCtr.userModel.value.role ==
+                                          Role.staff &&
+                                      mainCtr.userModel.value.status !=
+                                          "approved") {
+                                    Get.defaultDialog(
+                                      title: "แอดมินกำลังตรวจสอบบัญชีของท่าน",
+                                    );
+
+                                    return;
+                                  }
+
                                   Get.to(
                                       () => LocationDetailPage(location: loc));
                                 },

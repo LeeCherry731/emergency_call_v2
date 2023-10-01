@@ -52,6 +52,7 @@ class MainCtr extends GetxService {
         "role": roleToString(Role.member),
         "email": email,
         "phone": phone,
+        "status": "none",
         "picture": "",
         "createdAt": DateTime.now().toString(),
         "updatedAt": DateTime.now().toString(),
@@ -60,9 +61,6 @@ class MainCtr extends GetxService {
       await Future.delayed(const Duration(seconds: 1));
       await getUser(email: email);
       Get.offAll(() => const MainPage());
-      // userDoc.snapshots().listen((event) {
-      //   log.i(event.data());
-      // });
     } catch (e) {
       log.e(e);
       snackError(title: "firebase auth error", msg: e.toString());
@@ -76,7 +74,6 @@ class MainCtr extends GetxService {
           .where((e) => e['email'] == email)
           .map((e) {
             final u = e.data();
-            log.i(u);
             return UserModel()
               ..id = e.id
               ..email = u['email']
@@ -84,6 +81,7 @@ class MainCtr extends GetxService {
               ..lastname = u['lastname']
               ..role = stringToRole(u['role'])
               ..phone = u['phone']
+              ..status = u['status'] ?? "none"
               ..picture = u['picture']
               ..createdAt = u['createdAt'].toString()
               ..updatedAt = u['updatedAt'].toString();
@@ -268,7 +266,28 @@ class MainCtr extends GetxService {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docNews.doc(id).update({"status": "approved"});
-      getUser(email: userModel.value.email);
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future approveUser({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docUser.doc(id).update({"status": "approved"});
+    } catch (e) {
+      log.e(e.toString());
+    }
+
+    SmartDialog.dismiss();
+  }
+
+  Future disapproveUser({required String id}) async {
+    SmartDialog.showLoading(msg: "Loading...");
+    try {
+      docUser.doc(id).update({"status": "disapproved"});
     } catch (e) {
       log.e(e.toString());
     }
@@ -280,7 +299,6 @@ class MainCtr extends GetxService {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docNews.doc(id).update({"status": "disapproved"});
-      getUser(email: userModel.value.email);
     } catch (e) {
       log.e(e.toString());
     }

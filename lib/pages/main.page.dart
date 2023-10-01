@@ -2,6 +2,7 @@ import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/pages/about.page/about.page.dart';
+import 'package:emergency_call_v2/pages/admin/admin.page.dart';
 import 'package:emergency_call_v2/pages/auth.page.dart';
 import 'package:emergency_call_v2/pages/contact.page/contact.page.dart';
 import 'package:emergency_call_v2/pages/home.page.dart';
@@ -41,6 +42,11 @@ class _MainPageState extends State<MainPage> {
       icon: Icons.person_2,
       title: 'About',
     ),
+    if (mainCtr.userModel.value.role == Role.admin)
+      const TabItem(
+        icon: Icons.person_pin_rounded,
+        title: 'users',
+      ),
   ];
 
   final pages = [
@@ -49,6 +55,7 @@ class _MainPageState extends State<MainPage> {
     const NewsPage(),
     const ContactPage(),
     const AboutPage(),
+    if (mainCtr.userModel.value.role == Role.admin) const AdminPage(),
   ];
 
   int indexPage = 0;

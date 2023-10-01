@@ -144,22 +144,26 @@ class _NewsPageState extends State<NewsPage> {
                                   child: Image.network(
                                     n.image,
                                     height: 100,
+                                    width: 100,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        "ชื่อเรื่อง: ${n.title}"
-                                            .text
-                                            .minFontSize(18)
-                                            .make(),
-                                        "ที่อยู่: ${n.address}".text.make(),
-                                      ],
+                                    SizedBox(
+                                      width: 200,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          "ชื่อเรื่อง: ${n.title}"
+                                              .text
+                                              .minFontSize(18)
+                                              .make(),
+                                          "ที่อยู่: ${n.address}".text.make(),
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(height: 10),
                                     "วันที่ ${n.getDate()}"
@@ -179,55 +183,6 @@ class _NewsPageState extends State<NewsPage> {
                       const Divider(),
                     ],
                   );
-                  // return InkWell(
-                  //   onTap: () {
-                  //     Get.to(() => NewsDetailPage(news: n));
-                  //   },
-                  //   child: Card(
-                  //     shape: RoundedRectangleBorder(
-                  //       side: BorderSide(
-                  //         color: Theme.of(context).colorScheme.outline,
-                  //       ),
-                  //       borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  //     ),
-                  //     elevation: 10,
-                  //     margin:
-                  //         const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  //     child: Row(
-                  //       children: [
-                  //         Padding(
-                  //           padding: const EdgeInsets.all(10),
-                  //           child: ClipRRect(
-                  //             borderRadius: BorderRadius.circular(8),
-                  //             child: Image.network(
-                  //               n.image,
-                  //               width: 100,
-                  //               height: 100,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         const SizedBox(width: 10),
-                  //         Column(
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           children: [
-                  //             Column(
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: [
-                  //                 "ชื่อเรื่อง: ${n.title}"
-                  //                     .text
-                  //                     .minFontSize(18)
-                  //                     .make(),
-                  //                 "ที่อยู่: ${n.address}".text.make(),
-                  //               ],
-                  //             ),
-                  //             const SizedBox(height: 10),
-                  //             "วันที่ ${n.getDate()}".text.make(),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
-                  // ),
-                  // );
                 },
               ),
             ),

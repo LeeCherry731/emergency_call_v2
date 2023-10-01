@@ -291,6 +291,7 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                     child: Image.network(
                                       widget.location.picture,
                                       height: 200,
+                                      width: 180,
                                     ),
                                   ),
                                 ),

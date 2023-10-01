@@ -8,6 +8,7 @@ class UserModel {
   Role role = Role.none;
   String email = "";
   String phone = "";
+  String status = "";
   String locations = "";
   String picture = "";
   String createdAt = "";
@@ -23,6 +24,7 @@ class UserModel {
     u.role = stringToRole(json["role"]);
     u.email = json["email"];
     u.phone = json["phone"];
+    u.status = json["status"];
     u.picture = json["picture"];
     u.createdAt = json["createdAt"];
     u.updatedAt = json["updatedAt"];

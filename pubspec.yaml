@@ -9,14 +9,16 @@ environment:
 
 dependencies:
   awesome_bottom_bar: ^1.2.4
+  awesome_notifications: ^0.7.7
   camera: ^0.10.5+4
   cloud_firestore: ^4.9.1
   cupertino_icons: ^1.0.2
   email_validator: ^2.1.17
   file_picker: ^5.5.0
+  firebase_analytics: ^10.5.0
   firebase_auth: ^4.7.2
   firebase_core: ^2.15.0
-  firebase_messaging: ^14.6.5
+  firebase_messaging: ^14.6.8
   firebase_storage: ^11.2.7
   flutter:
     sdk: flutter

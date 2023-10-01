@@ -27,7 +27,8 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.emergency_call_v2"
-    compileSdkVersion flutter.compileSdkVersion
+    // compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -48,7 +49,9 @@ android {
         applicationId "com.example.emergency_call_v2"
         // minSdkVersion flutter.minSdkVersion
         minSdkVersion 21
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 34
+
+        // targetSdkVersion flutter.targetSdkVersion
         // targetSdkVersion 23
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

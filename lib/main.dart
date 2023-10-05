@@ -75,7 +75,6 @@ IO.Socket socket = IO.io(ip3, <String, dynamic>{
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
-  /// OPTIONAL, using custom notification channel id
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'my_foreground', // id
     'MY FOREGROUND SERVICE', // title
@@ -103,35 +102,23 @@ Future<void> initializeService() async {
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
-      // this will be executed when app is in foreground or background in separated isolate
       onStart: onStart,
-
-      // auto start service
       autoStart: true,
       isForegroundMode: true,
-
       notificationChannelId: 'my_foreground',
       initialNotificationTitle: 'AWESOME SERVICE',
       initialNotificationContent: 'Initializing',
       foregroundServiceNotificationId: 888,
     ),
     iosConfiguration: IosConfiguration(
-      // auto start service
       autoStart: true,
-
-      // this will be executed when app is in foreground in separated isolate
       onForeground: onStart,
-
-      // you have to enable background fetch capability on xcode project
       onBackground: onIosBackground,
     ),
   );
 
   service.startService();
 }
-
-// to ensure this is executed
-// run app from xcode, then from xcode menu, select Simulate Background Fetch
 
 @pragma('vm:entry-point')
 Future<bool> onIosBackground(ServiceInstance service) async {
@@ -143,10 +130,7 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
-  // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
-
-  /// OPTIONAL when use custom notification
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {

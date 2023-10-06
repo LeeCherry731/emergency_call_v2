@@ -15,8 +15,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
-const ip3 = "http://10.0.2.2:3000";
-const ip4 = "https://socketa1.ausirisnext.com/frontend";
+const ip = "https://socketa1.ausirisnext.com/pushNotiNsp";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +66,7 @@ Map<String, String> headers = {
   'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
 };
 
-IO.Socket socket = IO.io(ip3, <String, dynamic>{
+IO.Socket socket = IO.io(ip, <String, dynamic>{
   'transports': ['websocket'],
   'extraHeaders': headers,
 });
@@ -152,7 +151,7 @@ void onStart(ServiceInstance service) async {
       'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
     };
 
-    IO.Socket socket = IO.io(ip3, <String, dynamic>{
+    IO.Socket socket = IO.io(ip, <String, dynamic>{
       'transports': ['websocket'],
       'extraHeaders': headers,
     });

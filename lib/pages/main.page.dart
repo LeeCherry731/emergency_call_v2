@@ -69,29 +69,29 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.all(8.0),
-      //   child: Row(
-      //     children: [
-      //       FloatingActionButton(
-      //         backgroundColor: Colors.amber,
-      //         onPressed: () {
-      //           socket?.emit("msg", {
-      //             "title": "tt",
-      //             "message": "mmm",
-      //           });
-      //         },
-      //       ),
-      //       FloatingActionButton(onPressed: () {
-      //         print(socket);
-      //         socket?.emit("msg", {
-      //           "title": "aaaaaaaaa",
-      //           "message": "dddddddd",
-      //         });
-      //       }),
-      //     ],
-      //   ),
-      // ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                socket?.emit("msg", {
+                  "title": "tt",
+                  "message": "mmm",
+                });
+              },
+            ),
+            FloatingActionButton(onPressed: () {
+              print(socket);
+              socket?.emit("msg", {
+                "title": "aaaaaaaaa",
+                "message": "dddddddd",
+              });
+            }),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Obx(
           () => mainCtr.userModel.value.firstname.text

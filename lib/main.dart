@@ -61,7 +61,7 @@ Map<String, String> headers = {
   'token': token,
   'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
 };
-IO.Socket? socket = IO.io(ip_local, <String, dynamic>{
+IO.Socket? socket = IO.io(ip_prod, <String, dynamic>{
   'transports': ['websocket'],
   'extraHeaders': headers,
 });
@@ -159,7 +159,7 @@ void onStart(ServiceInstance service) async {
       'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
     };
 
-    socket = IO.io(ip_local, <String, dynamic>{
+    socket = IO.io(ip_prod, <String, dynamic>{
       'transports': ['websocket'],
       'extraHeaders': headers,
     });
@@ -167,7 +167,6 @@ void onStart(ServiceInstance service) async {
     socket?.connect();
     socket?.onConnect((data) {
       print(socket?.connected);
-      socket?.on('test', (data) => print(data));
       socket?.on('noti', (data) async {
         print(data);
         await NotificationService.showNotification(
@@ -191,11 +190,9 @@ class NotificationService {
           channelKey: 'high_importance_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white,
           importance: NotificationImportance.Max,
           channelShowBadge: true,
-          onlyAlertOnce: true,
+          onlyAlertOnce: false,
           playSound: true,
           criticalAlerts: true,
         )
@@ -274,7 +271,7 @@ class NotificationService {
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        icon: "resource://drawable/launcher_icon",
+        icon: "resource://drawable/emer_icon",
         id: -1,
         channelKey: 'high_importance_channel',
         title: title,

@@ -303,66 +303,73 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                       const Divider(),
                       Column(
                         children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    SmartDialog.showLoading(msg: "Loading...");
-                                    await _goToUserLocation();
-                                    SmartDialog.dismiss();
-                                  },
-                                  child: "ตำแหน่งขอความช่วยเหลือ".text.make(),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    SmartDialog.showLoading(msg: "Loading...");
-                                    await _goToMyLocation();
-                                    SmartDialog.dismiss();
-                                  },
-                                  child: "ตำแหน่งของฉัน".text.make(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
+                          if (widget.location.status != "success")
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      SmartDialog.showLoading(
+                                          msg: "Loading...");
+                                      await _goToUserLocation();
+                                      SmartDialog.dismiss();
+                                    },
+                                    child: "ตำแหน่งขอความช่วยเหลือ".text.make(),
                                   ),
-                                  onPressed: () async {
-                                    await findRoute();
-                                  },
-                                  child: "คำนวนเส้นทาง".text.make(),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.orange,
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      SmartDialog.showLoading(
+                                          msg: "Loading...");
+                                      await _goToMyLocation();
+                                      SmartDialog.dismiss();
+                                    },
+                                    child: "ตำแหน่งของฉัน".text.make(),
                                   ),
-                                  onPressed: () async {
-                                    SmartDialog.showLoading(msg: "Loading...");
-                                    mainCtr.staffChooseLocation(
-                                        id: widget.location.id);
-                                    SmartDialog.dismiss();
-                                    Get.back();
-                                  },
-                                  child: "เลือก".text.make(),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          if (widget.location.status != "success")
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                    ),
+                                    onPressed: () async {
+                                      await findRoute();
+                                    },
+                                    child: "คำนวนเส้นทาง".text.make(),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                    onPressed: () async {
+                                      SmartDialog.showLoading(
+                                          msg: "Loading...");
+                                      mainCtr.staffChooseLocation(
+                                        id: widget.location.id,
+                                        location: widget.location,
+                                      );
+                                      SmartDialog.dismiss();
+                                      Get.back();
+                                    },
+                                    child: "เลือก".text.make(),
+                                  ),
+                                ),
+                              ],
+                            ),
                           if (widget.location.status == "going")
                             Row(
                               children: [
@@ -374,7 +381,9 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                     ),
                                     onPressed: () async {
                                       mainCtr.staffSuccess(
-                                          id: widget.location.id);
+                                        id: widget.location.id,
+                                        location: widget.location,
+                                      );
                                     },
                                     child:
                                         "ยืนยันการช่วยเหลือสำเร็จ".text.make(),
@@ -389,7 +398,9 @@ class _LocationDetailPageState extends State<LocationDetailPage> {
                                     ),
                                     onPressed: () async {
                                       mainCtr.staffFailed(
-                                          id: widget.location.id);
+                                        id: widget.location.id,
+                                        location: widget.location,
+                                      );
                                     },
                                     child: "ยืนยันการช่วยเหลือไม่สำเร็จ"
                                         .text

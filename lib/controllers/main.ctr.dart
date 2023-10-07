@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emergency_call_v2/main.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/models/location.doc.dart';
 import 'package:emergency_call_v2/models/user.model.dart';
@@ -30,9 +31,11 @@ class MainCtr extends GetxService {
   final docNews = FirebaseFirestore.instance.collection("news");
   final docContacts = FirebaseFirestore.instance.collection("contacts");
   final docComments = FirebaseFirestore.instance.collection("comments");
+
   final storageProfile = FirebaseStorage.instance.ref('profiles');
   final storageLocation = FirebaseStorage.instance.ref('locations');
   final storageNews = FirebaseStorage.instance.ref('news');
+
   final auth = FirebaseAuth.instance;
 
   final userModel = UserModel().obs;
@@ -179,6 +182,12 @@ class MainCtr extends GetxService {
         'longitude': point.longitude,
         'createdAt': DateTime.now().toString()
       });
+
+      socket?.emit("msg", {
+        "title": "มีผู้แจ้งเหตุ",
+        "message": title,
+      });
+
       await Future.delayed(const Duration(seconds: 1));
       Get.back();
     } catch (e) {
@@ -227,10 +236,18 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  Future staffChooseLocation({required String id}) async {
+  Future staffChooseLocation({
+    required String id,
+    required LocationDoc location,
+  }) async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docLocation.doc(id).update({"status": "going"});
+
+      socket?.emit("msg", {
+        "title": "เจ้าหน้าที่กำลังไป",
+        "message": "เรื่อง ${location.title}",
+      });
     } catch (e) {
       log.e(e.toString());
     }
@@ -238,10 +255,18 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  Future staffSuccess({required String id}) async {
+  Future staffSuccess({
+    required String id,
+    required LocationDoc location,
+  }) async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docLocation.doc(id).update({"status": "success"});
+      socket?.emit("msg", {
+        "title": "การช่วยเหลือสำเร็จ",
+        "message": "เรื่อง ${location.title}",
+      });
+
       Get.back();
     } catch (e) {
       log.e(e.toString());
@@ -250,10 +275,18 @@ class MainCtr extends GetxService {
     SmartDialog.dismiss();
   }
 
-  Future staffFailed({required String id}) async {
+  Future staffFailed({
+    required String id,
+    required LocationDoc location,
+  }) async {
     SmartDialog.showLoading(msg: "Loading...");
     try {
       docLocation.doc(id).update({"status": "failed"});
+
+      socket?.emit("msg", {
+        "title": "การช่วยเหลือไม่สำเร็จ",
+        "message": "เรื่อง ${location.title}",
+      });
       Get.back();
     } catch (e) {
       log.e(e.toString());

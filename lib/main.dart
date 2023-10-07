@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:emergency_call_v2/controllers/notification.ctr.dart';
+import 'package:emergency_call_v2/controllers/socketio.dart';
 import 'package:emergency_call_v2/pages/main.page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,8 +16,6 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
-const ip = "https://socketa1.ausirisnext.com/pushNotiNsp";
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -24,7 +23,7 @@ void main() async {
   );
 
   await NotificationService.initializeNotification();
-
+  await initializeService();
   await NotiCtr.initializeLocalNotifications();
   await NotiCtr.initializeIsolateReceivePort();
 
@@ -58,22 +57,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwOTQ0Njk0Zi02ZmE5LTRiZGItYjIyYy1iMjkxYjQyMTJkMmQiLCJ1bmlxdWVfbmFtZSI6Im1ob29udW1AZ21haWwuY29tIiwidGtleSI6Im53dVZVSTAwM2xjaHpodExBMkhHR3JrV1JNSXRhNUFSV2d4TmJqbkVTR1ZCTGxkTVo0MVlaYmpxUkVhdkRoTlB2cy80TjFXdlRPdHhYUUhUY3NOZHN3PT0iLCJ1c2VyVHlwZSI6IiIsImNsaWVudElEIjoiIiwic2NoZW1hIjoiRiIsIm5iZiI6MTY5NjM5MjQxNywiZXhwIjoxNjk2NDAzMjE3LCJpYXQiOjE2OTYzOTI0MTcsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0In0.4059b_Wn3PpGbcSjHBY-5oFKTxxSV8X50HhFNNVs37o";
-
-Map<String, String> headers = {
-  'token': token,
-  'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
-};
-
-IO.Socket socket = IO.io(ip, <String, dynamic>{
-  'transports': ['websocket'],
-  'extraHeaders': headers,
-});
-
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
+  /// OPTIONAL, using custom notification channel id
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'my_foreground', // id
     'MY FOREGROUND SERVICE', // title
@@ -101,17 +88,26 @@ Future<void> initializeService() async {
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
+      // this will be executed when app is in foreground or background in separated isolate
       onStart: onStart,
+
+      // auto start service
       autoStart: true,
       isForegroundMode: true,
+
       notificationChannelId: 'my_foreground',
       initialNotificationTitle: 'AWESOME SERVICE',
       initialNotificationContent: 'Initializing',
       foregroundServiceNotificationId: 888,
     ),
     iosConfiguration: IosConfiguration(
+      // auto start service
       autoStart: true,
+
+      // this will be executed when app is in foreground in separated isolate
       onForeground: onStart,
+
+      // you have to enable background fetch capability on xcode project
       onBackground: onIosBackground,
     ),
   );
@@ -145,40 +141,7 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-  try {
-    Map<String, String> headers = {
-      'token': token,
-      'memberId': "E0673DE2-1EF1-4240-95D1-6546D583CED6"
-    };
-
-    IO.Socket socket = IO.io(ip, <String, dynamic>{
-      'transports': ['websocket'],
-      'extraHeaders': headers,
-    });
-
-    socket.connect();
-    socket.onConnect((data) {
-      print(socket.connected);
-      socket.on('test', (data) => print(data));
-      socket.on('noti', (data) async {
-        print(data);
-        await NotificationService.showNotification(
-          title: data["title"],
-          body: data["message"],
-        );
-      });
-
-      socket.emit(
-        "msg",
-        {
-          "title": "setAsBackground",
-          "message": "setAsBackground",
-        },
-      );
-    });
-  } catch (e) {
-    print(e);
-  }
+  socketio.init();
 }
 
 class NotificationService {

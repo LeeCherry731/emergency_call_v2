@@ -1,5 +1,6 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:emergency_call_v2/controllers/main.ctr.dart';
+import 'package:emergency_call_v2/controllers/socketio.dart';
 import 'package:emergency_call_v2/models/enum.dart';
 import 'package:emergency_call_v2/pages/about.page/about.page.dart';
 import 'package:emergency_call_v2/pages/admin/admin.page.dart';
@@ -68,6 +69,22 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                socketio.init();
+              },
+            ),
+            FloatingActionButton(onPressed: () {
+              socketio.sentNoti();
+            }),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Obx(
           () => mainCtr.userModel.value.firstname.text

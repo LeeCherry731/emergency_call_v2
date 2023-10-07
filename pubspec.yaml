@@ -38,6 +38,7 @@ dependencies:
   location: ^5.0.3
 
   logger: ^2.0.1
+  shared_preferences: ^2.2.1
   socket_io_client: ^2.0.3+1
   url_launcher: ^6.1.12
   velocity_x: ^4.1.1

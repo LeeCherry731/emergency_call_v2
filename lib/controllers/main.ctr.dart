@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum LoadStatus {
   loading,
@@ -91,6 +92,9 @@ class MainCtr extends GetxService {
           })
           .toList()
           .first;
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("role", roleToString(userModel.value.role));
     } catch (e) {
       log.e(e);
     }
@@ -115,6 +119,8 @@ class MainCtr extends GetxService {
     try {
       await auth.signOut();
       userModel.value = UserModel();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("role", "");
       await Future.delayed(const Duration(seconds: 1));
       Get.offAll(() => const MainPage());
     } catch (e) {

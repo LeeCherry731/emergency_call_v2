@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:emergency_call_v2/controllers/notification.ctr.dart';
 import 'package:emergency_call_v2/controllers/socketio.dart';
@@ -168,7 +168,12 @@ void onStart(ServiceInstance service) async {
     socket?.onConnect((data) {
       print(socket?.connected);
       socket?.on('noti', (data) async {
-        print(data);
+        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+        // final role = prefs.getString("role");
+        // print('role: $role');
+
+        // if (role == null || role == "") return;
+
         await NotificationService.showNotification(
           title: data["title"],
           body: data["message"],
